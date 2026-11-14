@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments Galaxy — Dynamic Admin Control Panel</title>
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       ADMIN SECURITY PIN MODAL (DEFAULT PIN: admin123)
+       ========================================================================== -->
+  <div class="admin-login-overlay" id="loginOverlay">
+    <div class="admin-login-box">
+      <img src="assets/images/logo.png" alt="Moments Galaxy" class="login-logo">
+      <h2 class="login-title">Moments Galaxy Admin</h2>
+      <p class="login-sub">Enter your security PIN to access the control panel</p>
+      
+      <form id="adminLoginForm">
+        <input type="password" class="login-input" id="adminPinInput" placeholder="Enter PIN (default: admin123)" required autofocus>
+        <button type="submit" class="btn-login">Unlock Dashboard 🔓</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SIDEBAR NAVIGATION
+       ========================================================================== -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/images/logo.png" alt="Moments Galaxy">
+      <span class="sidebar-badge">ADMIN</span>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li>
+        <button type="button" class="nav-item-btn active" data-tab="tabDashboard">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabHero">
+          <span class="nav-icon">✨</span>
+          <span>Hero & Welcome</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabTheaters">
+          <span class="nav-icon">🎬</span>
+          <span>Private Theaters (4)</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabButtons">
+          <span class="nav-icon">🔗</span>
+          <span>Action Buttons & Links</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabCoupons">
+          <span class="nav-icon">🏷️</span>
+          <span>Discount Coupons</span>
+          <span class="sidebar-badge" id="couponsStateBadge">ON</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabNotice">
+          <span class="nav-icon">🎙️</span>
+          <span>Notice & Voice FAQ</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabInquiries">
+          <span class="nav-icon">✉️</span>
+          <span>Inquiries Inbox</span>
+          <span class="badge-count" id="inquiriesCountBadge">0</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabLocation">
+          <span class="nav-icon">📍</span>
+          <span>Map & Location</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabContacts">
+          <span class="nav-icon">📞</span>
+          <span>Contacts & Socials</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabTheme">
+          <span class="nav-icon">🎨</span>
+          <span>Light / Dark Theme</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabMedia">
+          <span class="nav-icon">📁</span>
+          <span>Media Uploader</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabBackup">
+          <span class="nav-icon">💾</span>
+          <span>Backup & Reset</span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <button type="button" class="nav-item-btn" id="adminLogoutBtn" style="color: #ff7675;">
+        <span class="nav-icon">🔒</span>
+        <span>Lock Admin Panel</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="admin-main">
+    
+    <!-- Top Action Header -->
+    <header class="admin-header">
+      <div class="admin-header-title">
+        <span id="tabTitleDisplay">📊 Dashboard</span>
+      </div>
+
+      <div class="admin-header-actions">
+        <!-- View Live Landing Page -->
+        <a href="index.html" class="btn-header-view" target="_blank" rel="noopener">
+          <span>👁️</span>
+          <span>View Live Page</span>
+        </a>
+
+        <!-- Save All Changes Button -->
+        <button type="button" class="btn-header-save" id="btnSaveMaster">
+          <span>💾</span>
+          <span>Save Changes</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab Panes Container -->
+    <div class="admin-body">
+
+      <!-- ====================================================================
+           TAB 0: DASHBOARD / OVERVIEW
+           ==================================================================== -->
+      <section class="tab-pane active" id="tabDashboard">
+        <div class="form-grid-3">
+          <div class="admin-card" style="text-align: center;">
+            <div style="font-size: 32px; color: var(--gold-400);" id="statInquiries">0</div>
+            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">TOTAL INQUIRIES</div>
+          </div>
+          <div class="admin-card" style="text-align: center;">
+            <div style="font-size: 32px; color: #55efc4;" id="statCoupons">Active</div>
+            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">COUPONS STATUS</div>
+          </div>
+          <div class="admin-card" style="text-align: center;">
+            <div style="font-size: 32px; color: var(--gold-400);">4 Theaters</div>
+            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">DEMO VIDEOS</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">🚀 Welcome to Moments Galaxy Admin</div>
+              <div class="card-desc">100% Dynamic configuration for your private cinema landing page.</div>
+            </div>
+            <a href="index.html" target="_blank" class="btn-header-view">Open Landing Page ↗</a>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7;">
+            Everything you customize here (demo videos, audio voice notes, discount coupons, booking links, WhatsApp numbers, Google Map location, and theme modes) updates immediately on the live landing page.
+          </p>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 1: HERO & WELCOME VIDEO
+           ==================================================================== -->
+      <section class="tab-pane" id="tabHero">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">✨ Hero Banner & Presenter Video</div>
+              <div class="card-desc">Customize the main hero title, tagline, description, and welcome video.</div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Welcome Script Subtitle</label>
+              <input type="text" class="field-input" id="heroWelcomeSubtitleInput">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Brand Title</label>
+              <input type="text" class="field-input" id="heroBrandTitleInput">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Tagline (With Heart)</label>
+            <input type="text" class="field-input" id="heroTaglineInput">
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Hero Description</label>
+            <textarea class="field-textarea" id="heroDescriptionInput"></textarea>
+          </div>
+
+          <!-- Hero Video Dual Option (URL or Direct Upload from PC) -->
+          <div class="form-field">
+            <label class="field-label">Hero Welcome Video Source (Choose URL or Direct PC Upload)</label>
+            <div class="media-dual-box">
+              <div class="media-options-grid">
+                <div>
+                  <label class="field-label" style="font-size: 11px;">Option A: Paste Video URL</label>
+                  <input type="text" class="field-input" id="heroVideoUrlInput" placeholder="https://example.com/welcome-video.mp4">
+                </div>
+                <div class="media-divider-or">— OR —</div>
+                <div class="media-upload-area">
+                  <label class="field-label" style="font-size: 11px;">Option B: Direct Upload From PC</label>
+                  <input type="file" id="heroVideoFileInput" accept="video/mp4,video/webm,video/*" style="display: none;">
+                  <button type="button" class="btn-upload-direct" onclick="document.getElementById('heroVideoFileInput').click()">
+                    <span>📁 Upload Video File (MP4/WebM)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Uploaded file info & live preview player -->
+              <div id="heroVideoUploadedContainer" style="display: none; margin-top: 12px;">
+                <div class="media-uploaded-card">
+                  <div class="media-file-info">
+                    <span>🎬 Active Upload:</span>
+                    <span id="heroVideoUploadedName">video.mp4</span>
+                    <span style="font-size: 11px; opacity: 0.8;" id="heroVideoUploadedSize"></span>
+                  </div>
+                  <button type="button" class="btn-remove-media" id="btnRemoveHeroVideo">✕ Remove Upload</button>
+                </div>
+                <video class="media-preview-player" id="heroVideoAdminPreview" controls playsinline style="margin-top: 10px;"></video>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Hero Poster Image URL / Path</label>
+            <input type="text" class="field-input" id="heroPosterInput">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Unmute Badge Label</label>
+              <input type="text" class="field-input" id="heroUnmuteLabelInput">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Explore Button Text</label>
+              <input type="text" class="field-input" id="heroExploreBtnInput">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 2: PRIVATE THEATERS (4 DEMO VIDEOS)
+           ==================================================================== -->
+      <section class="tab-pane" id="tabTheaters">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">🎬 Private Theaters (4 Demo Videos & Details)</div>
+              <div class="card-desc">Edit video URLs, duration badges, titles, descriptions, and guest capacities.</div>
+            </div>
+          </div>
+
+          <div id="theatersListContainer">
+            <!-- Dynamically populated theater edit blocks -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 3: ACTION BUTTONS & LINKS
+           ==================================================================== -->
+      <section class="tab-pane" id="tabButtons">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">🔗 Quick Action Hub Buttons</div>
+              <div class="card-desc">Configure where Add-ons, Food Order, and Booking buttons navigate.</div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">1. Add-ons Button Link (🎁)</label>
+            <input type="url" class="field-input" id="linkAddonsInput" placeholder="https://momentsgalaxy.com/add-ons">
+            <small style="color: var(--text-muted); font-size: 12px;">Default: https://momentsgalaxy.com/add-ons</small>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">2. Foods Button Link (🍴)</label>
+            <input type="url" class="field-input" id="linkFoodInput" placeholder="https://momentsgalaxy.com/food-order">
+            <small style="color: var(--text-muted); font-size: 12px;">Default: https://momentsgalaxy.com/food-order</small>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">3. Book Now Button Link (📅)</label>
+            <input type="url" class="field-input" id="linkBookingInput" placeholder="https://momentsgalaxy.com/booking">
+            <small style="color: var(--text-muted); font-size: 12px;">Default: https://momentsgalaxy.com/booking</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 4: PUBLIC DISCOUNT COUPONS (DYNAMIC TOGGLE)
+           Requirement: "Discount cupones shoe tbhi hoge jb hum on krege nhi to ye part hi nhi rhega yhn."
+           ==================================================================== -->
+      <section class="tab-pane" id="tabCoupons">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">🏷️ Public Discount Coupons Management</div>
+              <div class="card-desc">Toggle display on landing page and manage discount codes.</div>
+            </div>
+
+            <!-- Master Toggle Switch -->
+            <label class="switch-control">
+              <input type="checkbox" class="switch-input" id="toggleCouponsEnabled">
+              <span class="switch-track">
+                <span class="switch-thumb"></span>
+              </span>
+              <span class="switch-label" id="couponsToggleText">Coupons: ON</span>
+            </label>
+          </div>
+
+          <div style="background: rgba(223, 177, 91, 0.08); border-left: 3px solid var(--gold-500); padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-size: 13.5px;">
+            ⚠️ <strong>User Rule:</strong> Agar Coupons switch <strong>OFF</strong> hoga, to landing page se coupons section poori tarah hide ho jayega!
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Section Heading</label>
+              <input type="text" class="field-input" id="couponsHeadingInput">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Section Subheading</label>
+              <input type="text" class="field-input" id="couponsSubheadingInput">
+            </div>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <label class="field-label">Active Discount Coupons List</label>
+            <div id="couponsItemsContainer">
+              <!-- Dynamically populated coupon rows -->
+            </div>
+
+            <button type="button" class="btn-add-item" id="btnAddCoupon">
+              <span>➕</span>
+              <span>Add New Coupon</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 5: NOTICE VIDEO & VOICE FAQ
+           Requirement: "Questions in writing answear use play voice and Weiting.
+           Har question ke niche ek answear ki voice play note hoga"
+           ==================================================================== -->
+      <section class="tab-pane" id="tabNotice">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">📢 Notice Video & Voice FAQ Management</div>
+              <div class="card-desc">Manage the guidelines video and written + audio voice questions.</div>
+            </div>
+          </div>
+
+          <!-- Notice Video Dual Option (URL or Direct Upload from PC) -->
+          <div class="form-field">
+            <label class="field-label">Notice Guidelines Video Source (Choose URL or Direct PC Upload)</label>
+            <div class="media-dual-box">
+              <div class="media-options-grid">
+                <div>
+                  <label class="field-label" style="font-size: 11px;">Option A: Paste Video URL</label>
+                  <input type="text" class="field-input" id="noticeVideoUrlInput" placeholder="https://example.com/notice.mp4">
+                </div>
+                <div class="media-divider-or">— OR —</div>
+                <div class="media-upload-area">
+                  <label class="field-label" style="font-size: 11px;">Option B: Direct Upload From PC</label>
+                  <input type="file" id="noticeVideoFileInput" accept="video/mp4,video/webm,video/*" style="display: none;">
+                  <button type="button" class="btn-upload-direct" onclick="document.getElementById('noticeVideoFileInput').click()">
+                    <span>📁 Upload Video File (MP4/WebM)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Uploaded file info & live preview player -->
+              <div id="noticeVideoUploadedContainer" style="display: none; margin-top: 12px;">
+                <div class="media-uploaded-card">
+                  <div class="media-file-info">
+                    <span>🎬 Active Upload:</span>
+                    <span id="noticeVideoUploadedName">notice.mp4</span>
+                    <span style="font-size: 11px; opacity: 0.8;" id="noticeVideoUploadedSize"></span>
+                  </div>
+                  <button type="button" class="btn-remove-media" id="btnRemoveNoticeVideo">✕ Remove Upload</button>
+                </div>
+                <video class="media-preview-player" id="noticeVideoAdminPreview" controls playsinline style="margin-top: 10px;"></video>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Notice Video Duration Badge (e.g. 00:48)</label>
+            <input type="text" class="field-input" id="noticeVideoDurationInput">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Notice Section Heading</label>
+              <input type="text" class="field-input" id="noticeHeadingInput">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Notice Section Subtitle</label>
+              <input type="text" class="field-input" id="noticeSubheadingInput">
+            </div>
+          </div>
+
+          <div style="margin-top: 14px;">
+            <label class="field-label">Voice FAQs (With Writing + Voice Note Player)</label>
+            <div id="faqsContainer">
+              <!-- Dynamically populated FAQ editing items -->
+            </div>
+
+            <button type="button" class="btn-add-item" id="btnAddFaq">
+              <span>➕</span>
+              <span>Add New Voice FAQ</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 6: INQUIRIES INBOX (LEAD MANAGER)
+           ==================================================================== -->
+      <section class="tab-pane" id="tabInquiries">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">✉️ Customer Inquiries & Leads Inbox</div>
+              <div class="card-desc">Real-time leads submitted via the inquiry form. Click WhatsApp to chat directly!</div>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn-header-view" id="btnExportInquiries">
+                <span>📥</span>
+                <span>Export CSV</span>
+              </button>
+              <button type="button" class="btn-remove-row" id="btnClearInquiries">
+                <span>🗑️</span>
+                <span>Clear All</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="inquiries-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Customer Name</th>
+                  <th>WhatsApp / Phone</th>
+                  <th>Occasion</th>
+                  <th>Preferred Theater</th>
+                  <th>Event Date</th>
+                  <th>Details / Notes</th>
+                  <th>Status</th>
+                  <th>Direct Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inquiriesTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 7: MAP & GOOGLE LOCATION
+           Coordinates: 30.726564696917464, 76.7252708362585
+           ==================================================================== -->
+      <section class="tab-pane" id="tabLocation">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">📍 Google Map & Venue Location</div>
+              <div class="card-desc">Set venue coordinates and embedded map details.</div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Coordinates (Latitude, Longitude)</label>
+              <input type="text" class="field-input" id="mapCoordsInput" value="30.726564696917464, 76.7252708362585">
+              <small style="color: var(--text-muted); font-size: 12px;">Configured to: 30.726564696917464, 76.7252708362585</small>
+            </div>
+            <div class="form-field">
+              <label class="field-label">Venue Display Title</label>
+              <input type="text" class="field-input" id="mapTitleInput">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Full Venue Address</label>
+            <input type="text" class="field-input" id="mapAddressInput">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Google Maps Direct URL</label>
+              <input type="url" class="field-input" id="mapDirectUrlInput">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Google Maps Embed URL (Iframe src)</label>
+              <input type="url" class="field-input" id="mapEmbedUrlInput">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 8: CONTACTS & SOCIALS
+           Details: 8699505560, Instagram: https://instagram.com/moments_galaxy
+           ==================================================================== -->
+      <section class="tab-pane" id="tabContacts">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">📞 Contact Numbers & Social Media</div>
+              <div class="card-desc">Update WhatsApp, Phone call, Instagram, YouTube, and Facebook links.</div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">WhatsApp Number (10 Digits)</label>
+              <input type="text" class="field-input" id="contactWaInput" value="8699505560">
+            </div>
+            <div class="form-field">
+              <label class="field-label">WhatsApp Display Text</label>
+              <input type="text" class="field-input" id="contactWaDisplayInput" value="+91 8699505560">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Phone Call Number</label>
+              <input type="text" class="field-input" id="contactPhoneInput" value="8699505560">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Phone Display Text</label>
+              <input type="text" class="field-input" id="contactPhoneDisplayInput" value="+91 8699505560">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Instagram Link Connect Button</label>
+            <input type="url" class="field-input" id="contactInstaInput" value="https://instagram.com/moments_galaxy">
+            <small style="color: var(--text-muted); font-size: 12px;">Connected to: https://instagram.com/moments_galaxy</small>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">YouTube URL</label>
+              <input type="url" class="field-input" id="contactYtInput">
+            </div>
+            <div class="form-field">
+              <label class="field-label">Facebook URL</label>
+              <input type="url" class="field-input" id="contactFbInput">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 9: LIGHT & DARK THEME CONTROL
+           Requirement: "UI light and dark mode control from admin"
+           ==================================================================== -->
+      <section class="tab-pane" id="tabTheme">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">🎨 UI Light and Dark Mode Control</div>
+              <div class="card-desc">Set default theme mode for visitors and control theme switch visibility.</div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="field-label">Default Landing Page Theme Mode</label>
+              <select class="field-select" id="themeDefaultModeSelect">
+                <option value="dark">Dark Luxury (Obsidian & Gold - Mockup Default)</option>
+                <option value="light">Light Luxury (Champagne & Velvet)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="field-label">Allow Visitor Theme Switch Button</label>
+              <select class="field-select" id="themeVisitorToggleSelect">
+                <option value="true">Yes (Show Sun/Moon toggle button in header)</option>
+                <option value="false">No (Lock to Default Theme only)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Primary Gold Accent Color</label>
+            <input type="color" class="field-input" id="themeAccentColorInput" value="#dfb15b" style="height: 44px; padding: 4px; cursor: pointer;">
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 10: MEDIA UPLOADER (AUDIO & VIDEOS)
+           Requirement: "Admin dynemic upload audio-videos etc."
+           ==================================================================== -->
+      <section class="tab-pane" id="tabMedia">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">📁 Dynamic Media Uploader (Audio & Videos)</div>
+              <div class="card-desc">Upload custom video clips or audio voice recordings directly into local storage.</div>
+            </div>
+          </div>
+
+          <div style="border: 2px dashed var(--gold-border); padding: 36px 20px; text-align: center; border-radius: var(--radius-lg); margin-bottom: 24px;">
+            <div style="font-size: 38px; margin-bottom: 8px;">📤</div>
+            <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Choose Audio or Video File to Upload</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Supports MP4, WebM, MP3, WAV, M4A, JPG, PNG, SVG</div>
+            
+            <input type="file" id="mediaFileInput" accept="video/*,audio/*,image/*" style="display: none;">
+            <button type="button" class="btn-header-save" onclick="document.getElementById('mediaFileInput').click()">
+              Select Media File
+            </button>
+          </div>
+
+          <div id="mediaUploadFeedback" style="display: none; background: var(--admin-card-inner); border: 1px solid var(--gold-500); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+            <div style="font-weight: 700; color: var(--gold-300); margin-bottom: 6px;">Media Loaded Successfully! 🎉</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Generated Data/Object URL (Copy and paste into any video or audio field):</div>
+            <input type="text" class="field-input" id="mediaGeneratedUrl" readonly onclick="this.select()">
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 11: BACKUP & RESTORE
+           ==================================================================== -->
+      <section class="tab-pane" id="tabBackup">
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">💾 Configuration Backup, Export & Factory Reset</div>
+              <div class="card-desc">Export landing page settings to JSON or restore original factory defaults.</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <button type="button" class="btn-header-save" id="btnExportConfig">
+              <span>📥</span>
+              <span>Export Full Settings (JSON)</span>
+            </button>
+
+            <button type="button" class="btn-header-view" onclick="document.getElementById('importConfigFile').click()">
+              <span>📤</span>
+              <span>Import Settings (JSON)</span>
+            </button>
+            <input type="file" id="importConfigFile" accept=".json" style="display: none;">
+
+            <button type="button" class="btn-remove-row" id="btnResetDefaults" style="padding: 10px 18px; font-size: 13.5px;">
+              <span>⚠️</span>
+              <span>Reset to Factory Defaults</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Admin Toast Notification -->
+  <div class="admin-toast" id="adminToast">Changes saved successfully! ✨</div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

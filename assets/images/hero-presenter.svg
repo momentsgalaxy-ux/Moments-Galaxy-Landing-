@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#4a1828" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#140a16" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0a050d" stop-opacity="1"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffeaa7"/>
+      <stop offset="50%" stop-color="#dfb15b"/>
+      <stop offset="100%" stop-color="#996515"/>
+    </linearGradient>
+    <radialGradient id="stageLight" cx="50%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#ffd56b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ffd56b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="1000" fill="url(#bgGlow)"/>
+
+  <!-- Warm cinematic bokeh lights -->
+  <circle cx="150" cy="180" r="100" fill="#dfb15b" opacity="0.12" filter="url(#softGlow)"/>
+  <circle cx="680" cy="220" r="130" fill="#e84393" opacity="0.1" filter="url(#softGlow)"/>
+  <circle cx="400" cy="350" r="280" fill="url(#stageLight)"/>
+  
+  <!-- Sparkles -->
+  <g fill="#ffeaa7" opacity="0.7">
+    <polygon points="120,280 123,290 133,293 123,296 120,306 117,296 107,293 117,290" />
+    <polygon points="650,150 652,158 660,160 652,162 650,170 648,162 640,160 648,158" />
+    <polygon points="720,380 722,386 728,388 722,390 720,396 718,390 712,388 718,386" />
+    <polygon points="200,450 202,456 208,458 202,460 200,466 198,460 192,458 198,456" />
+  </g>
+
+  <!-- Metallic Luxury Balloons Backdrop -->
+  <!-- Left Balloons -->
+  <g opacity="0.85">
+    <ellipse cx="80" cy="340" rx="65" ry="80" fill="#8b0000" />
+    <ellipse cx="60" cy="320" rx="15" ry="25" fill="#ff7675" opacity="0.4" />
+    <path d="M80,420 Q75,460 85,500" stroke="#dfb15b" stroke-width="1.5" fill="none"/>
+
+    <ellipse cx="140" cy="260" rx="55" ry="70" fill="url(#goldGrad)" />
+    <ellipse cx="125" cy="245" rx="12" ry="20" fill="#ffffff" opacity="0.5" />
+    <path d="M140,330 Q145,390 130,460" stroke="#dfb15b" stroke-width="1.5" fill="none"/>
+  </g>
+
+  <!-- Right Balloons -->
+  <g opacity="0.85">
+    <ellipse cx="710" cy="310" rx="65" ry="80" fill="#9b111e" />
+    <ellipse cx="690" cy="290" rx="15" ry="25" fill="#ff7675" opacity="0.4" />
+    <path d="M710,390 Q700,440 715,500" stroke="#dfb15b" stroke-width="1.5" fill="none"/>
+
+    <ellipse cx="640" cy="240" rx="55" ry="70" fill="url(#goldGrad)" />
+    <ellipse cx="625" cy="225" rx="12" ry="20" fill="#ffffff" opacity="0.5" />
+    <path d="M640,310 Q635,370 650,440" stroke="#dfb15b" stroke-width="1.5" fill="none"/>
+  </g>
+
+  <!-- Host Presenter Stylized Silhouette / Vector Art -->
+  <g transform="translate(180, 240)">
+    <!-- Aura Glow behind host -->
+    <ellipse cx="220" cy="350" rx="180" ry="280" fill="#dfb15b" opacity="0.15" filter="url(#softGlow)"/>
+
+    <!-- Dress with sparkling sequins -->
+    <path d="M170,360 C180,310 260,310 270,360 L320,650 C320,680 120,680 120,650 Z" fill="#120e17"/>
+    <!-- Dress overlay with gold glitter dots -->
+    <g fill="#dfb15b" opacity="0.6">
+      <circle cx="190" cy="380" r="2.5"/><circle cx="210" cy="370" r="3"/><circle cx="230" cy="375" r="2"/><circle cx="250" cy="385" r="2.5"/>
+      <circle cx="180" cy="420" r="3"/><circle cx="220" cy="410" r="2.5"/><circle cx="240" cy="425" r="3"/><circle cx="260" cy="415" r="2"/>
+      <circle cx="170" cy="470" r="2.5"/><circle cx="210" cy="460" r="3"/><circle cx="235" cy="470" r="3.5"/><circle cx="270" cy="465" r="2.5"/>
+      <circle cx="160" cy="530" r="3"/><circle cx="200" cy="520" r="2"/><circle cx="240" cy="535" r="3"/><circle cx="280" cy="525" r="2.5"/>
+    </g>
+
+    <!-- Arms & Shoulders -->
+    <!-- Left Arm -->
+    <path d="M170,360 C140,400 130,460 135,520 C145,530 155,510 160,470 L180,400 Z" fill="#d49c7a"/>
+    <!-- Right Gesturing Arm (Gesturing towards the headline!) -->
+    <path d="M270,360 C320,400 370,410 440,360 C450,350 445,340 425,345 C380,365 330,370 280,340 Z" fill="#d49c7a"/>
+
+    <!-- Neck & Face -->
+    <path d="M205,290 L235,290 L230,335 L210,335 Z" fill="#d49c7a"/>
+    <ellipse cx="220" cy="245" rx="42" ry="52" fill="#e8b28f"/>
+    <!-- Smile & Features -->
+    <path d="M210,265 Q220,275 230,265" stroke="#a24b52" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Elegant Hair with soft volume -->
+    <path d="M175,250 C170,180 270,180 265,250 C280,310 275,370 270,410 C255,380 255,320 250,280 C240,195 200,195 190,280 C185,330 180,380 170,410 C165,370 160,310 175,250 Z" fill="#2d1a15"/>
+    <ellipse cx="255" cy="245" rx="4" ry="7" fill="#dfb15b"/> <!-- Golden earring -->
+  </g>
+
+  <!-- Big Play Button Overlay Symbol -->
+  <g transform="translate(400, 480)">
+    <circle cx="0" cy="0" r="55" fill="#dfb15b" opacity="0.95" filter="url(#softGlow)"/>
+    <circle cx="0" cy="0" r="48" fill="#140a16" opacity="0.8"/>
+    <polygon points="-12,-20 22,0 -12,20" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- Tap to Unmute Badge Graphic Preview -->
+  <g transform="translate(60, 900)">
+    <rect width="180" height="42" rx="21" fill="#140a16" opacity="0.85" stroke="#dfb15b" stroke-width="1.5"/>
+    <!-- Speaker Icon -->
+    <path d="M30,22 L38,22 L46,28 L46,14 L38,20 L30,20 Z" fill="#dfb15b"/>
+    <path d="M50,18 Q54,21 50,24" stroke="#dfb15b" stroke-width="1.5" fill="none"/>
+    <path d="M53,15 Q59,21 53,27" stroke="#dfb15b" stroke-width="1.5" fill="none"/>
+    <text x="68" y="26" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="13" font-weight="600" fill="#ffffff">Tap to Unmute</text>
+  </g>
+</svg>

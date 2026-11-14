@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="100%" height="100%">
+  <defs>
+    <radialGradient id="primeAddonsGlow" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#550d1d"/>
+      <stop offset="60%" stop-color="#22060b"/>
+      <stop offset="100%" stop-color="#0a0204"/>
+    </radialGradient>
+    <linearGradient id="roseGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffb8b8"/>
+      <stop offset="50%" stop-color="#e84118"/>
+      <stop offset="100%" stop-color="#800000"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="400" fill="url(#primeAddonsGlow)"/>
+
+  <!-- Screen with Glowing "I LOVE YOU" Neon & Marquee sign -->
+  <rect x="120" y="45" width="400" height="195" rx="8" fill="#140206" stroke="#c0392b" stroke-width="2"/>
+  <rect x="130" y="55" width="380" height="175" fill="#2d050e"/>
+
+  <!-- "I ❤ YOU" Marquee Letters -->
+  <g transform="translate(190, 110)">
+    <rect x="0" y="0" width="45" height="55" rx="4" fill="#150207" stroke="#dfb15b" stroke-width="2"/>
+    <text x="22" y="42" font-family="'Playfair Display', Georgia, serif" font-size="36" font-weight="900" fill="#ffd700" text-anchor="middle" filter="drop-shadow(0 0 8px #ff9f1a)">I</text>
+
+    <!-- Heart -->
+    <path d="M90,15 C90,5 75,5 75,20 C75,32 90,45 90,45 C90,45 105,32 105,20 C105,5 90,5 90,15 Z" fill="#e74c3c" filter="drop-shadow(0 0 10px #ff3838)"/>
+
+    <rect x="135" y="0" width="45" height="55" rx="4" fill="#150207" stroke="#dfb15b" stroke-width="2"/>
+    <text x="157" y="42" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#ffd700" text-anchor="middle" filter="drop-shadow(0 0 8px #ff9f1a)">Y</text>
+
+    <rect x="190" y="0" width="45" height="55" rx="4" fill="#150207" stroke="#dfb15b" stroke-width="2"/>
+    <text x="212" y="42" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#ffd700" text-anchor="middle" filter="drop-shadow(0 0 8px #ff9f1a)">O</text>
+
+    <rect x="245" y="0" width="45" height="55" rx="4" fill="#150207" stroke="#dfb15b" stroke-width="2"/>
+    <text x="267" y="42" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#ffd700" text-anchor="middle" filter="drop-shadow(0 0 8px #ff9f1a)">U</text>
+  </g>
+
+  <!-- Big Red & Gold Balloon Clusters on both sides -->
+  <!-- Left Side -->
+  <circle cx="50" cy="90" r="32" fill="#c0392b"/>
+  <circle cx="80" cy="120" r="30" fill="#dfb15b"/>
+  <circle cx="50" cy="160" r="34" fill="#800000"/>
+  <circle cx="85" cy="200" r="28" fill="#c0392b"/>
+  <circle cx="55" cy="240" r="32" fill="#dfb15b"/>
+  <circle cx="90" cy="270" r="26" fill="#800000"/>
+
+  <!-- Right Side -->
+  <circle cx="590" cy="90" r="32" fill="#c0392b"/>
+  <circle cx="560" cy="120" r="30" fill="#dfb15b"/>
+  <circle cx="590" cy="160" r="34" fill="#800000"/>
+  <circle cx="555" cy="200" r="28" fill="#c0392b"/>
+  <circle cx="585" cy="240" r="32" fill="#dfb15b"/>
+  <circle cx="550" cy="270" r="26" fill="#800000"/>
+
+  <!-- Rose Petals Carpet / Heart on the floor -->
+  <path d="M260,330 C260,310 220,310 220,340 C220,365 260,390 260,390 C260,390 300,365 300,340 C300,310 260,310 260,330 Z" fill="#b71540" transform="scale(1.5) translate(-70, -110)"/>
+
+  <!-- Candles on Floor -->
+  <g fill="#fffa65" filter="drop-shadow(0 0 8px #ff9f1a)">
+    <circle cx="160" cy="360" r="6"/>
+    <circle cx="210" cy="370" r="6"/>
+    <circle cx="430" cy="370" r="6"/>
+    <circle cx="480" cy="360" r="6"/>
+    <circle cx="320" cy="375" r="7"/>
+  </g>
+
+  <!-- Play Button Overlay -->
+  <circle cx="320" cy="200" r="36" fill="rgba(24, 4, 8, 0.85)" stroke="#dfb15b" stroke-width="2"/>
+  <polygon points="314,188 334,200 314,212" fill="#ffd700"/>
+</svg>

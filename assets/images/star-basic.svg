@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="100%" height="100%">
+  <defs>
+    <radialGradient id="starBasicGlow" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#40101b"/>
+      <stop offset="60%" stop-color="#190913"/>
+      <stop offset="100%" stop-color="#0a0508"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffeaa7"/>
+      <stop offset="100%" stop-color="#d49f3d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="400" fill="url(#starBasicGlow)"/>
+
+  <!-- Screen with Glowing Ambient Backlight -->
+  <rect x="140" y="50" width="360" height="190" rx="8" fill="#12050b" stroke="#dfb15b" stroke-width="2"/>
+  <rect x="150" y="60" width="340" height="170" rx="4" fill="#300a16"/>
+  
+  <!-- "Happy Birthday" Neon text on screen -->
+  <text x="320" y="130" font-family="'Playfair Display', Georgia, serif" font-size="28" font-weight="700" fill="#ffeaa7" text-anchor="middle" filter="drop-shadow(0 0 10px #ff7675)">Happy Birthday</text>
+  <text x="320" y="165" font-family="Arial, sans-serif" font-size="14" letter-spacing="4" fill="#dfb15b" text-anchor="middle">MOMENTS GALAXY</text>
+
+  <!-- Red & White Balloon Garlands -->
+  <g opacity="0.9">
+    <!-- Left column balloons -->
+    <circle cx="80" cy="80" r="30" fill="#9b111e"/>
+    <circle cx="110" cy="110" r="28" fill="#ffffff" opacity="0.85"/>
+    <circle cx="85" cy="150" r="32" fill="#d49f3d"/>
+    <circle cx="110" cy="190" r="26" fill="#9b111e"/>
+    <circle cx="85" cy="230" r="30" fill="#ffffff" opacity="0.85"/>
+    
+    <!-- Right column balloons -->
+    <circle cx="560" cy="80" r="30" fill="#9b111e"/>
+    <circle cx="530" cy="110" r="28" fill="#ffffff" opacity="0.85"/>
+    <circle cx="555" cy="150" r="32" fill="#d49f3d"/>
+    <circle cx="530" cy="190" r="26" fill="#9b111e"/>
+    <circle cx="555" cy="230" r="30" fill="#ffffff" opacity="0.85"/>
+
+    <!-- Top arch balloons -->
+    <circle cx="170" cy="45" r="24" fill="#9b111e"/>
+    <circle cx="230" cy="40" r="25" fill="#ffffff" opacity="0.85"/>
+    <circle cx="290" cy="38" r="26" fill="#d49f3d"/>
+    <circle cx="350" cy="38" r="26" fill="#9b111e"/>
+    <circle cx="410" cy="40" r="25" fill="#ffffff" opacity="0.85"/>
+    <circle cx="470" cy="45" r="24" fill="#d49f3d"/>
+  </g>
+
+  <!-- Romantic Candle Table in foreground -->
+  <rect x="220" y="270" width="200" height="35" rx="6" fill="#2d1219" stroke="#dfb15b" stroke-width="1"/>
+  <!-- Candles -->
+  <rect x="250" y="255" width="8" height="15" fill="#ffffff"/>
+  <ellipse cx="254" cy="250" rx="3" ry="5" fill="#ffb142"/>
+  <rect x="380" y="255" width="8" height="15" fill="#ffffff"/>
+  <ellipse cx="384" cy="250" rx="3" ry="5" fill="#ffb142"/>
+
+  <!-- Luxury Recliner Loungers in front -->
+  <path d="M60,330 C120,310 240,310 290,340 L300,400 L50,400 Z" fill="#1b0811" stroke="#33101b" stroke-width="2"/>
+  <path d="M350,340 C400,310 520,310 580,330 L590,400 L340,400 Z" fill="#1b0811" stroke="#33101b" stroke-width="2"/>
+
+  <!-- Rose Petals on Floor -->
+  <g fill="#c0392b">
+    <ellipse cx="200" cy="360" rx="8" ry="4" transform="rotate(20,200,360)"/>
+    <ellipse cx="240" cy="375" rx="9" ry="5" transform="rotate(-15,240,375)"/>
+    <ellipse cx="320" cy="370" rx="10" ry="4" transform="rotate(30,320,370)"/>
+    <ellipse cx="400" cy="365" rx="8" ry="4" transform="rotate(-25,400,365)"/>
+    <ellipse cx="440" cy="380" rx="7" ry="5" transform="rotate(10,440,380)"/>
+  </g>
+
+  <!-- Play Button Overlay -->
+  <circle cx="320" cy="200" r="36" fill="rgba(18, 10, 22, 0.75)" stroke="#dfb15b" stroke-width="2"/>
+  <polygon points="314,188 334,200 314,212" fill="#ffeaa7"/>
+</svg>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments Galaxy — Luxury Private Mini Theaters & Celebrations</title>
+  <meta name="description" content="Celebrate Birthdays, Anniversaries, Proposals & all Special Occasions in your own Private Mini Theater at Moments Galaxy. Book your private cinema today!">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Background Spotlights -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- ==========================================================================
+       HEADER / NAVIGATION
+       ========================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container">
+      <!-- Brand Logo -->
+      <a href="#" class="brand-logo" id="brandLogoLink">
+        <img src="assets/images/logo.png" alt="Moments Galaxy Logo" id="headerLogoImg">
+      </a>
+
+      <!-- Right Navigation Actions -->
+      <div class="nav-right-actions">
+        <!-- Theme Toggle (Light / Dark Mode) -->
+        <button type="button" class="btn-theme-toggle" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Switch Theme">
+          <span id="themeToggleIcon">🌙</span>
+        </button>
+
+        <!-- Book Now Top Header Pill -->
+        <a href="https://momentsgalaxy.com/booking" class="btn-book-header" id="headerBookBtn" target="_blank" rel="noopener">
+          <span>📅</span>
+          <span>Book Now</span>
+        </a>
+
+        <!-- Mobile Hamburger Menu Button -->
+        <button type="button" class="btn-hamburger" id="hamburgerBtn" aria-label="Open Navigation Menu">
+          <span>☰</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Side Navigation Drawer for Mobile & Quick Access -->
+  <div class="nav-drawer-overlay" id="drawerOverlay"></div>
+  <aside class="nav-drawer" id="navDrawer" aria-label="Navigation Drawer">
+    <div class="drawer-header">
+      <img src="assets/images/logo.png" alt="Moments Galaxy" style="height: 48px; object-fit: contain;">
+      <button type="button" class="drawer-close" id="drawerCloseBtn" aria-label="Close Menu">&times;</button>
+    </div>
+    
+    <ul class="drawer-links">
+      <li><a href="#welcome"><span>✨ Welcome Info</span> <span>›</span></a></li>
+      <li><a href="#theaters"><span>🎬 Our Theaters</span> <span>›</span></a></li>
+      <li><a href="https://momentsgalaxy.com/add-ons" id="drawerAddonsLink" target="_blank"><span>🎁 Explore Add-ons</span> <span>›</span></a></li>
+      <li><a href="https://momentsgalaxy.com/food-order" id="drawerFoodLink" target="_blank"><span>🍴 Food Menu</span> <span>›</span></a></li>
+      <li><a href="https://momentsgalaxy.com/booking" id="drawerBookLink" target="_blank" style="color: var(--gold-400);"><span>📅 Book Theater Now</span> <span>›</span></a></li>
+      <li><a href="#notice"><span>📢 Guidelines & Voice FAQ</span> <span>›</span></a></li>
+      <li><a href="#inquiry"><span>✉️ Inquiry Form</span> <span>›</span></a></li>
+      <li><a href="#location"><span>📍 Location & Map</span> <span>›</span></a></li>
+      <li><a href="tel:8699505560" id="drawerCallLink"><span>📞 Call +91 8699505560</span> <span>›</span></a></li>
+      <li><a href="https://wa.me/918699505560" id="drawerWaLink" target="_blank"><span>💬 WhatsApp Us</span> <span>›</span></a></li>
+    </ul>
+
+    <!-- Admin Link -->
+    <a href="admin.html" class="drawer-admin-link">⚙️ Admin Control Panel</a>
+  </aside>
+
+  <!-- ==========================================================================
+       01. WELCOME INFORMATION VIDEO + HERO BANNER
+       ========================================================================== -->
+  <section class="hero-section" id="welcome">
+    <div class="container">
+      <div class="hero-grid">
+        
+        <!-- Video Presenter Container (Plays automatically with sound) -->
+        <div class="hero-video-box" id="heroVideoTrigger" title="Moments Galaxy Welcome Video">
+          <video id="heroVideoElement" loop playsinline autoplay preload="auto" poster="assets/images/hero-presenter.svg" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-celebration-at-a-private-cinema-party-41804-large.mp4" type="video/mp4" id="heroVideoSource">
+          </video>
+          
+          <!-- Sound Toggle Pill Badge (Shows Sound ON by default) -->
+          <div class="unmute-pill" id="heroUnmutePill" role="button" aria-label="Toggle Sound">
+            <span id="soundIcon">🔊</span>
+            <span id="unmuteLabelText">Sound ON</span>
+          </div>
+
+          <!-- Center Glowing Play/Pause Button (Shows when paused) -->
+          <div class="play-btn-circle" id="heroPlayBtn" aria-label="Play / Pause Video" style="opacity: 0; pointer-events: none; transition: opacity 0.3s ease;">
+            <span id="heroPlayIcon">▶</span>
+          </div>
+        </div>
+
+        <!-- Hero Content / Banner Text -->
+        <div class="hero-content">
+          <span class="hero-welcome-script" id="heroWelcomeSubtitle">Welcome to</span>
+          <h1 class="hero-main-title text-gold-gradient" id="heroBrandTitle">Moments Galaxy</h1>
+          <div class="hero-tagline" id="heroTagline">
+            Your Moments, Our Galaxy ❤️
+          </div>
+          <p class="hero-desc" id="heroDescription">
+            Celebrate Birthdays, Anniversaries, Proposals & all Special Occasions in your own Private Mini Theater.
+          </p>
+          <a href="#theaters" class="btn-explore" id="heroExploreBtn">
+            <span>Explore Our Theaters ↓</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       02. DEMO VIDEOS BOTH THEATERS WITH DESCRIPTION
+       ========================================================================== -->
+  <section class="section-spacing" id="theaters">
+    <div class="container">
+      
+      <!-- Section Title with Star Sparkles -->
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="sparkle">✦</span>
+          <span>Our Private Theaters</span>
+          <span class="sparkle">✦</span>
+        </h2>
+        <p class="section-subtitle">
+          Experience ultra-high-definition cinema, ambient decorative lights, romantic recliners, and private theater luxury.
+        </p>
+      </div>
+
+      <!-- 2x2 Grid of Private Theater Demo Cards -->
+      <div class="theaters-grid" id="theatersGrid">
+        <!-- Rendered dynamically by data.js / app.js with default 4 items -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       03. BUTTONS: ADD-ONS, FOODS, BOOK NOW
+       ========================================================================== -->
+  <section class="quick-buttons-section">
+    <div class="container">
+      <div class="quick-buttons-grid">
+        
+        <!-- Add-ons Button -->
+        <a href="https://momentsgalaxy.com/add-ons" class="quick-hub-btn" id="btnHubAddons" target="_blank" rel="noopener">
+          <div class="hub-icon-wrap">🎁</div>
+          <div class="hub-text-wrap">
+            <div class="hub-title">Add-ons</div>
+            <div class="hub-sub">Explore All Add-ons →</div>
+          </div>
+        </a>
+
+        <!-- Foods Button -->
+        <a href="https://momentsgalaxy.com/food-order" class="quick-hub-btn" id="btnHubFoods" target="_blank" rel="noopener">
+          <div class="hub-icon-wrap">🍴</div>
+          <div class="hub-text-wrap">
+            <div class="hub-title">Foods</div>
+            <div class="hub-sub">View Food Menu →</div>
+          </div>
+        </a>
+
+        <!-- Book Now Featured Button -->
+        <a href="https://momentsgalaxy.com/booking" class="quick-hub-btn featured-book" id="btnHubBooking" target="_blank" rel="noopener">
+          <div class="hub-icon-wrap">📅</div>
+          <div class="hub-text-wrap">
+            <div class="hub-title">Book Now</div>
+            <div class="hub-sub">Reserve Your Slot →</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       04. PUBLIC DISCOUNT COUPONS (DYNAMIC ADMIN CONTROLLED)
+       Requirement: "Discount cupones shoe tbhi hoge jb hum on krege nhi to ye part hi nhi rhega yhn."
+       ========================================================================== -->
+  <section class="coupons-section" id="couponsSection" style="display: none;">
+    <div class="container">
+      <div class="coupons-banner">
+        <div class="coupons-banner-head">
+          <h3 class="text-gold-gradient" id="couponsHeading">Special Celebration Offers & Discount Coupons</h3>
+          <p class="section-subtitle" id="couponsSubheading">Limited time festive discounts! Apply coupon code at checkout or mention in your inquiry.</p>
+        </div>
+        
+        <div class="coupons-grid" id="couponsGrid">
+          <!-- Dynamically populated from GalaxyData -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       05. NOTICE VIDEO & INTERACTIVE VOICE FAQ SECTION
+       Requirement: "Questions in writing answear use play voice and Weiting. Har question ke niche ek answear ki voice play note hoga"
+       ========================================================================== -->
+  <section class="notice-section section-spacing" id="notice">
+    <div class="container">
+      
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="sparkle">✦</span>
+          <span id="noticeMainHeading">Have Questions? Check Our Notice</span>
+          <span class="sparkle">✦</span>
+        </h2>
+        <p class="section-subtitle" id="noticeSubHeading">
+          Watch the theater guidelines video and listen to audio voice answers for common questions.
+        </p>
+      </div>
+
+      <div class="notice-layout">
+        
+        <!-- Left: Notice Video Preview Card -->
+        <div class="notice-video-wrap">
+          <div class="notice-video-inner" id="noticeVideoTrigger" title="Click to watch theater guidelines video">
+            <img src="assets/images/notice-poster.svg" alt="Moments Galaxy Guidelines" id="noticePosterImg">
+            <div class="duration-badge" id="noticeDurationBadge">00:48</div>
+            <div class="play-btn-circle">
+              <span>▶</span>
+            </div>
+          </div>
+          <div class="notice-video-info">
+            <div class="notice-video-title">Rules & Celebration Guidelines</div>
+            <div class="notice-video-sub">Watch 48-second quick video before your booking</div>
+          </div>
+        </div>
+
+        <!-- Right: FAQ Accordion with Interactive Voice Note Players -->
+        <div class="faq-accordion-list" id="faqAccordionList">
+          <!-- Injected dynamically by app.js -->
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       06. READY TO CELEBRATE? BOOK NOW / WHATSAPP / CALL US
+       ========================================================================== -->
+  <section class="celebrate-section" id="celebrate">
+    <div class="container">
+      <div class="celebrate-arch-banner">
+        
+        <!-- Floating decorative glowing hearts -->
+        <div class="floating-heart heart-left">❤️</div>
+        <div class="floating-heart heart-right">❤️</div>
+
+        <div class="celebrate-heading">Ready to Celebrate?</div>
+        <div class="celebrate-sub">Book Your Favorite Theater Now!</div>
+
+        <!-- 3 Contact / Action Circles -->
+        <div class="celebrate-actions-row">
+          
+          <!-- Book Now -->
+          <a href="https://momentsgalaxy.com/booking" class="celebrate-action-circle-item" id="celebrateBookLink" target="_blank" rel="noopener">
+            <div class="celebrate-circle-icon">📅</div>
+            <div class="celebrate-action-label">Book Now</div>
+            <div class="celebrate-action-sublabel">Instant Slot</div>
+          </a>
+
+          <!-- WhatsApp Us -->
+          <a href="https://wa.me/918699505560?text=Hi%20Moments%20Galaxy,%20I%20want%20to%20book%20a%20private%20theater!" class="celebrate-action-circle-item" id="celebrateWaLink" target="_blank" rel="noopener">
+            <div class="celebrate-circle-icon wa-icon">💬</div>
+            <div class="celebrate-action-label">WhatsApp</div>
+            <div class="celebrate-action-sublabel" id="celebrateWaDisplay">+91 8699505560</div>
+          </a>
+
+          <!-- Call Us -->
+          <a href="tel:8699505560" class="celebrate-action-circle-item" id="celebrateCallLink">
+            <div class="celebrate-circle-icon">📞</div>
+            <div class="celebrate-action-label">Call Us</div>
+            <div class="celebrate-action-sublabel" id="celebrateCallDisplay">+91 8699505560</div>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       07. INQUIRY FORM SECTION
+       ========================================================================== -->
+  <section class="inquiry-section" id="inquiry">
+    <div class="container">
+      <div class="inquiry-card-wrapper">
+        
+        <!-- Left: Luxury Visual (Gift Box & Red Roses) -->
+        <div class="inquiry-visual-col">
+          <img src="assets/images/luxury-gift-roses.svg" alt="Luxury Celebration Gifts & Roses">
+        </div>
+
+        <!-- Right: Inquiry Form -->
+        <div class="inquiry-form-col">
+          <div class="inquiry-header-box">
+            <h3 class="inquiry-header-title text-gold-gradient">
+              <span>✉️</span>
+              <span>Inquiry Form</span>
+            </h3>
+            <p class="inquiry-header-sub">Have a special request? Fill the form and we'll get back to you soon!</p>
+          </div>
+
+          <form id="inquiryForm" class="inquiry-form-grid">
+            
+            <!-- Your Name * -->
+            <div class="form-group">
+              <div class="input-icon-wrap">
+                <span class="input-icon">👤</span>
+                <input type="text" class="form-control" id="inqName" name="name" placeholder="Your Name *" required>
+              </div>
+            </div>
+
+            <!-- WhatsApp Number * -->
+            <div class="form-group">
+              <div class="input-icon-wrap">
+                <span class="input-icon">📞</span>
+                <input type="tel" class="form-control" id="inqWhatsapp" name="whatsapp" placeholder="WhatsApp Number *" required>
+              </div>
+            </div>
+
+            <!-- Occasion -->
+            <div class="form-group">
+              <div class="input-icon-wrap">
+                <span class="input-icon">⭐</span>
+                <select class="form-control" id="inqOccasion" name="occasion">
+                  <option value="Birthday Celebration">Birthday Celebration</option>
+                  <option value="Anniversary Celebration">Anniversary Celebration</option>
+                  <option value="Marriage Proposal">Marriage Proposal</option>
+                  <option value="Romantic Date Night">Romantic Date Night</option>
+                  <option value="Private Movie Screening">Private Movie Screening</option>
+                  <option value="Baby Shower / Farewell">Baby Shower / Farewell</option>
+                  <option value="Other Special Occasion">Other Special Occasion</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Preferred Theater -->
+            <div class="form-group">
+              <div class="input-icon-wrap">
+                <span class="input-icon">👑</span>
+                <select class="form-control" id="inqTheater" name="theater">
+                  <option value="Star Theater – Basic">Star Theater – Basic</option>
+                  <option value="Star Theater – With Add-ons">Star Theater – With Add-ons</option>
+                  <option value="Prime Theater – Basic">Prime Theater – Basic</option>
+                  <option value="Prime Theater – With Add-ons">Prime Theater – With Add-ons</option>
+                  <option value="Need Recommendation">Need Recommendation</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Event Date -->
+            <div class="form-group form-group-full">
+              <div class="input-icon-wrap">
+                <span class="input-icon">📅</span>
+                <input type="date" class="form-control" id="inqDate" name="date" required>
+              </div>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="form-group form-group-full">
+              <div class="input-icon-wrap">
+                <span class="input-icon" style="top: 14px;">💬</span>
+                <textarea class="form-control" id="inqDetails" name="details" placeholder="Additional Details (e.g. number of guests, customized cake, surprises...)"></textarea>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group form-group-full">
+              <button type="submit" class="btn-submit-inquiry" id="btnSubmitInquiry">
+                <span>✈</span>
+                <span>Submit Inquiry</span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       09. GOOGLE MAP LOCATION
+       Coordinates: 30.726564696917464, 76.7252708362585
+       ========================================================================== -->
+  <section class="map-section" id="location">
+    <div class="container">
+      <div class="map-card-wrapper">
+        
+        <!-- Left: Embedded Map -->
+        <div class="map-frame-wrap">
+          <iframe 
+            id="googleMapIframe"
+            src="https://maps.google.com/maps?q=30.726564696917464,76.7252708362585&hl=en&z=15&output=embed" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Moments Galaxy Google Map Location">
+          </iframe>
+        </div>
+
+        <!-- Right: Location Details & Open in Maps CTA -->
+        <div class="map-details-col">
+          <div class="map-pin-badge">
+            <span>📍</span>
+            <span>FIND US EASILY</span>
+          </div>
+          <h3 class="map-venue-title text-gold-gradient" id="mapTitle">Visit Moments Galaxy</h3>
+          <p class="map-venue-address" id="mapAddress">
+            Moments Galaxy Private Theater, Near Tricity Hub, Chandigarh / Mohali Region.
+          </p>
+          <div class="map-coords-pill" id="mapCoordsPill">
+            GPS: 30.726564, 76.725270
+          </div>
+          <a href="https://www.google.com/maps?q=30.726564696917464,76.7252708362585" class="btn-open-maps" id="btnOpenMaps" target="_blank" rel="noopener">
+            <span>🧭</span>
+            <span>Get Directions in Google Maps</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      
+      <!-- Top Row -->
+      <div class="footer-top-row">
+        <!-- Logo -->
+        <a href="#" class="brand-logo">
+          <img src="assets/images/logo.png" alt="Moments Galaxy Logo" style="height: 60px; object-fit: contain;">
+        </a>
+
+        <!-- Social Icons -->
+        <div class="footer-social-links">
+          <!-- Instagram: https://instagram.com/moments_galaxy -->
+          <a href="https://instagram.com/moments_galaxy" class="social-circle-link" id="footerInstaLink" target="_blank" rel="noopener" aria-label="Moments Galaxy Instagram" title="Follow us on Instagram">
+            <span>📷</span>
+          </a>
+          <!-- YouTube -->
+          <a href="https://youtube.com" class="social-circle-link" id="footerYtLink" target="_blank" rel="noopener" aria-label="Moments Galaxy YouTube" title="Watch on YouTube">
+            <span>▶</span>
+          </a>
+          <!-- Facebook -->
+          <a href="https://facebook.com" class="social-circle-link" id="footerFbLink" target="_blank" rel="noopener" aria-label="Moments Galaxy Facebook" title="Facebook Page">
+            <span>f</span>
+          </a>
+          <!-- WhatsApp -->
+          <a href="https://wa.me/918699505560" class="social-circle-link" id="footerWaLink" target="_blank" rel="noopener" aria-label="Moments Galaxy WhatsApp" title="Chat on WhatsApp">
+            <span>💬</span>
+          </a>
+        </div>
+
+        <!-- Tagline -->
+        <div class="footer-tagline-text">
+          Your Moments • Our Galaxy ❤️
+        </div>
+      </div>
+
+      <!-- Bottom Row -->
+      <div class="footer-bottom-row">
+        <div>
+          &copy; <span id="currentYear">2026</span> Moments Galaxy. All rights reserved. Private Cinema Experiences.
+        </div>
+        <div>
+          <a href="admin.html" class="footer-admin-link">
+            <span>⚙️</span>
+            <span>Admin Control Panel</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODAL: HIGH-DEFINITION VIDEO PLAYER LIGHTBOX
+       ========================================================================== -->
+  <div class="modal-overlay" id="videoModal">
+    <div class="video-modal-card">
+      <button type="button" class="btn-close-modal" id="closeVideoModalBtn" aria-label="Close video player">&times;</button>
+      
+      <div class="video-modal-player-wrap" id="videoPlayerContainer">
+        <video id="modalVideoElement" controls playsinline></video>
+      </div>
+
+      <div class="video-modal-footer">
+        <div>
+          <h4 class="video-modal-title" id="modalVideoTitle">Star Theater – Basic</h4>
+          <p class="video-modal-desc" id="modalVideoDesc">Private cinema demo preview</p>
+        </div>
+        <a href="https://momentsgalaxy.com/booking" class="btn-book-card" id="modalBookNowBtn" target="_blank" rel="noopener">
+          <span>📅</span>
+          <span>Book This Theater</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Message -->
+  <div class="toast-notice" id="toastNotice">
+    <span id="toastIcon">✨</span>
+    <span id="toastMsg">Coupon code copied!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
