@@ -95,7 +95,7 @@ const DEFAULT_CONFIG = {
     tagline: 'Your Moments, Our Galaxy ❤️',
     description: 'Celebrate Birthdays, Anniversaries, Proposals & all Special Occasions in your own Private Mini Theater.',
     exploreButtonText: 'Explore Our Theaters ↓',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-celebration-at-a-private-cinema-party-41804-large.mp4',
+    videoUrl: 'assets/videos/hero-celebration.mp4',
     videoPoster: 'assets/images/hero-presenter.svg',
     unmuteLabel: 'Sound ON'
   },
@@ -114,7 +114,7 @@ const DEFAULT_CONFIG = {
       duration: '01:20',
       badge: 'WIDE SCREEN',
       description: 'Grand VIP private theater featuring ultra-luxurious recliner sofas, massive 4K laser projection, and Dolby 7.1 audio.',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cinema-auditorium-with-movie-playing-on-screen-41799-large.mp4',
+      videoUrl: 'assets/videos/prime-basic.mp4',
       poster: 'assets/images/prime-basic.svg',
       capacity: '4 - 12 Guests',
       bestFor: 'Family & Group Celebrations'
@@ -130,7 +130,7 @@ const DEFAULT_CONFIG = {
       duration: '01:55',
       badge: 'PREMIUM VIP',
       description: 'The ultimate royal experience: I-LOVE-YOU / MARRY-ME marquee lights, red carpet, cake table, rose bouquets, and customized photo slideshow.',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-party-with-sparklers-and-lights-41801-large.mp4',
+      videoUrl: 'assets/videos/prime-addons.mp4',
       poster: 'assets/images/prime-addons.svg',
       capacity: '4 - 15 Guests',
       bestFor: 'Surprise Proposals & Grand Parties'
@@ -146,7 +146,7 @@ const DEFAULT_CONFIG = {
       duration: '01:12',
       badge: 'POPULAR',
       description: 'Cozy romantic mini theater setup with high-definition cinema projection, surround sound, and balloon decor.',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-romantic-dinner-table-with-candles-in-a-cozy-room-41802-large.mp4',
+      videoUrl: 'assets/videos/star-basic.mp4',
       poster: 'assets/images/star-basic.svg',
       capacity: '2 - 6 Guests',
       bestFor: 'Birthdays & Dates'
@@ -162,7 +162,7 @@ const DEFAULT_CONFIG = {
       duration: '01:45',
       badge: 'DELUXE',
       description: 'Upgraded Star Theater with neon ambient lights, fog effect, luxury balloon arch, rose petal path, and photo booth setup.',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-friends-laughing-and-enjoying-a-movie-at-a-cinema-41800-large.mp4',
+      videoUrl: 'assets/videos/star-addons.mp4',
       poster: 'assets/images/star-addons.svg',
       capacity: '2 - 8 Guests',
       bestFor: 'Proposals & Anniversaries'
@@ -206,7 +206,7 @@ const DEFAULT_CONFIG = {
     heading: 'Have Questions? Check Our Notice',
     subheading: 'Watch the quick guidelines video & listen to voice answers for common questions.',
     videoDuration: '00:48',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-explaining-a-presentation-video-41798-large.mp4',
+    videoUrl: 'assets/videos/notice-guidelines.mp4',
     videoPoster: 'assets/images/notice-poster.svg',
     faqs: [
       {
@@ -296,6 +296,20 @@ class GalaxyDataManager {
 
         const orderPriority = { 'prime-basic': 1, 'prime-addons': 2, 'star-basic': 3, 'star-addons': 4 };
         mergedTheaters.sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
+
+        // Auto-migrate legacy external blocked video URLs to local assets
+        if (parsed.hero && parsed.hero.videoUrl && parsed.hero.videoUrl.includes('mixkit.co')) {
+          parsed.hero.videoUrl = DEFAULT_CONFIG.hero.videoUrl;
+        }
+        if (parsed.notice && parsed.notice.videoUrl && parsed.notice.videoUrl.includes('mixkit.co')) {
+          parsed.notice.videoUrl = DEFAULT_CONFIG.notice.videoUrl;
+        }
+        mergedTheaters.forEach(th => {
+          if (th.videoUrl && th.videoUrl.includes('mixkit.co')) {
+            const defTh = defaultTheatersMap[th.id];
+            if (defTh) th.videoUrl = defTh.videoUrl;
+          }
+        });
 
         return {
           ...DEFAULT_CONFIG,

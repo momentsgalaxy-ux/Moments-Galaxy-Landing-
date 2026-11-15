@@ -81,14 +81,14 @@
         
         <!-- Video Presenter Container (Plays automatically with sound) -->
         <div class="hero-video-box" id="heroVideoTrigger" title="Moments Galaxy Welcome Video">
-          <video id="heroVideoElement" loop playsinline autoplay preload="auto" poster="assets/images/hero-presenter.svg" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-celebration-at-a-private-cinema-party-41804-large.mp4" type="video/mp4" id="heroVideoSource">
+          <video id="heroVideoElement" loop playsinline webkit-playsinline x5-playsinline autoplay muted preload="auto" poster="assets/images/hero-presenter.svg" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            <source src="assets/videos/hero-celebration.mp4" type="video/mp4" id="heroVideoSource">
           </video>
           
           <!-- Sound Toggle Pill Badge (Shows Sound ON by default) -->
-          <div class="unmute-pill" id="heroUnmutePill" role="button" aria-label="Toggle Sound">
-            <span id="soundIcon">🔊</span>
-            <span id="unmuteLabelText">Sound ON</span>
+          <div class="unmute-pill muted-prompt" id="heroUnmutePill" role="button" aria-label="Toggle Sound">
+            <span id="soundIcon">🔇</span>
+            <span id="unmuteLabelText">Tap for Sound</span>
           </div>
 
           <!-- Center Glowing Play/Pause Button (Shows when paused) -->
@@ -464,7 +464,11 @@
       <button type="button" class="btn-close-modal" id="closeVideoModalBtn" aria-label="Close video player">&times;</button>
       
       <div class="video-modal-player-wrap" id="videoPlayerContainer">
-        <video id="modalVideoElement" controls playsinline></video>
+        <video id="modalVideoElement" controls playsinline webkit-playsinline x5-playsinline preload="auto"></video>
+        <div class="modal-play-overlay" id="modalPlayOverlay" style="display: none;">
+          <div class="modal-play-icon-circle">▶</div>
+          <span class="modal-play-text">Tap to Play Video</span>
+        </div>
       </div>
 
       <div class="video-modal-footer">

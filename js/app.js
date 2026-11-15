@@ -212,9 +212,9 @@ function renderHero(data) {
   if (!video) return;
 
   // Retrieve active video URL: checks IndexedDB direct upload first, then fallback config URL
-  window.GalaxyMediaDB.getMediaUrl('hero_video', hero.videoUrl || 'https://assets.mixkit.co/videos/preview/mixkit-celebration-at-a-private-cinema-party-41804-large.mp4').then(targetUrl => {
-    if (source && source.src !== targetUrl) {
-      source.src = targetUrl;
+  window.GalaxyMediaDB.getMediaUrl('hero_video', hero.videoUrl || 'assets/videos/hero-celebration.mp4').then(targetUrl => {
+    if (targetUrl && (source && source.src !== targetUrl || video.src !== targetUrl)) {
+      if (source) source.src = targetUrl;
       video.src = targetUrl;
       video.load();
       startHeroVideo();
@@ -237,39 +237,27 @@ function renderHero(data) {
     }
   }
 
-  // Attempt unmuted autoplay by default
+  // Reliable Autoplay Function (starts muted for 100% mobile compatibility)
   function startHeroVideo() {
-    video.muted = false;
-    video.volume = 1.0;
+    video.muted = true;
+    video.defaultMuted = true;
 
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
-        // Autoplayed successfully WITH SOUND!
-        updateSoundBadge(false);
-        if (playBtn) playBtn.style.opacity = '0';
+        updateSoundBadge(true);
+        if (playBtn) {
+          playBtn.style.opacity = '0';
+          playBtn.style.pointerEvents = 'none';
+        }
       }).catch((err) => {
-        console.log('Unmuted autoplay deferred by browser policy. Playing muted first, then unmuting on first interaction:', err);
-        // Play muted so video is 100% running immediately
-        video.muted = true;
-        video.play().then(() => {
-          updateSoundBadge(true);
-          if (playBtn) playBtn.style.opacity = '0';
-        }).catch(e => console.log('Video play error:', e));
-
-        // Unmute automatically on user's first touch/click/scroll anywhere
-        const enableSoundOnGesture = () => {
-          video.muted = false;
-          video.volume = 1.0;
-          updateSoundBadge(false);
-          ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
-            window.removeEventListener(evt, enableSoundOnGesture, { capture: true });
-          });
-        };
-
-        ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
-          window.addEventListener(evt, enableSoundOnGesture, { capture: true, once: true });
-        });
+        console.log('Mobile autoplay deferred by policy:', err);
+        // Show play button if browser blocked even muted autoplay (e.g. low power mode)
+        if (playBtn) {
+          playBtn.style.opacity = '1';
+          playBtn.style.pointerEvents = 'auto';
+          if (playIcon) playIcon.textContent = '▶';
+        }
       });
     }
   }
@@ -284,50 +272,93 @@ function renderHero(data) {
     }
   });
 
-  // Sound toggle button click
+  // Sound toggle button click / touch
+  function handleSoundToggle(e) {
+    if (e) e.stopPropagation();
+    video.muted = !video.muted;
+    if (!video.muted) {
+      video.volume = 1.0;
+      updateSoundBadge(false);
+      if (video.paused) video.play().catch(() => {});
+    } else {
+      updateSoundBadge(true);
+    }
+  }
+
   if (unmutePill) {
-    unmutePill.onclick = (e) => {
-      e.stopPropagation();
-      video.muted = !video.muted;
-      if (!video.muted) video.volume = 1.0;
-      updateSoundBadge(video.muted);
-      if (video.paused) video.play();
-    };
+    unmutePill.addEventListener('click', handleSoundToggle);
+    unmutePill.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleSoundToggle(e);
+    });
   }
 
-  // Click on video toggles Play/Pause or Unmute
+  // Direct user tap on video triggers Play / Pause / Unmute
+  function handleVideoTap() {
+    if (video.paused) {
+      video.muted = false;
+      video.volume = 1.0;
+      updateSoundBadge(false);
+      video.play().catch(() => {
+        video.muted = true;
+        video.play().catch(() => {});
+      });
+      if (playBtn) {
+        playBtn.style.opacity = '0';
+        playBtn.style.pointerEvents = 'none';
+      }
+      return;
+    }
+
+    // If currently muted, unmute on first tap
+    if (video.muted) {
+      video.muted = false;
+      video.volume = 1.0;
+      updateSoundBadge(false);
+      return;
+    }
+
+    // Otherwise toggle pause
+    video.pause();
+    if (playBtn) {
+      playBtn.style.opacity = '1';
+      playBtn.style.pointerEvents = 'auto';
+      if (playIcon) playIcon.textContent = '▶';
+    }
+  }
+
   if (heroTrigger) {
-    heroTrigger.onclick = () => {
-      if (video.muted) {
-        video.muted = false;
-        video.volume = 1.0;
-        updateSoundBadge(false);
-        if (video.paused) video.play();
-        return;
-      }
-
-      if (video.paused) {
-        video.play();
-        if (playBtn) playBtn.style.opacity = '0';
-      } else {
-        video.pause();
-        if (playBtn) {
-          playBtn.style.opacity = '1';
-          if (playIcon) playIcon.textContent = '▶';
-        }
-      }
-    };
+    heroTrigger.addEventListener('click', handleVideoTap);
   }
 
-  video.addEventListener('play', () => {
-    if (playBtn) playBtn.style.opacity = '0';
+  video.addEventListener('playing', () => {
+    if (playBtn) {
+      playBtn.style.opacity = '0';
+      playBtn.style.pointerEvents = 'none';
+    }
   });
 
   video.addEventListener('pause', () => {
     if (playBtn) {
       playBtn.style.opacity = '1';
+      playBtn.style.pointerEvents = 'auto';
       if (playIcon) playIcon.textContent = '▶';
     }
+  });
+
+  // Global first user interaction (touch or click) allows unmuting if desired
+  const enableSoundOnFirstTouch = () => {
+    if (!video.paused && video.muted) {
+      video.muted = false;
+      video.volume = 1.0;
+      updateSoundBadge(false);
+    }
+    ['click', 'touchstart'].forEach(evt => {
+      window.removeEventListener(evt, enableSoundOnFirstTouch, { capture: true });
+    });
+  };
+  ['click', 'touchstart'].forEach(evt => {
+    window.addEventListener(evt, enableSoundOnFirstTouch, { capture: true, once: true });
   });
 }
 
@@ -662,7 +693,7 @@ function renderNoticeAndVoiceFaq(data) {
   const noticeTrigger = document.getElementById('noticeVideoTrigger');
   if (noticeTrigger) {
     noticeTrigger.onclick = async () => {
-      const activeNoticeUrl = await window.GalaxyMediaDB.getMediaUrl('notice_video', notice.videoUrl || 'https://assets.mixkit.co/videos/preview/mixkit-woman-explaining-a-presentation-video-41798-large.mp4');
+      const activeNoticeUrl = await window.GalaxyMediaDB.getMediaUrl('notice_video', notice.videoUrl || 'assets/videos/notice-guidelines.mp4');
       openVideoModal({
         title: 'Moments Galaxy Notice & Guidelines',
         desc: 'Important guidelines for your private theater experience.',
@@ -961,22 +992,31 @@ function renderGoogleMap(data) {
 }
 
 /* ==========================================================================
-   VIDEO PLAYER MODAL
+   VIDEO PLAYER MODAL (100% RELIABLE ON MOBILE & DESKTOP)
    ========================================================================== */
 function initVideoModal() {
   const modal = document.getElementById('videoModal');
   const closeBtn = document.getElementById('closeVideoModalBtn');
   const videoEl = document.getElementById('modalVideoElement');
+  const overlay = document.getElementById('modalPlayOverlay');
 
   function closeModal() {
     if (modal) modal.classList.remove('active');
     if (videoEl) {
       videoEl.pause();
-      videoEl.src = '';
+      videoEl.removeAttribute('src');
+      videoEl.load();
     }
+    if (overlay) overlay.style.display = 'none';
   }
 
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+    closeBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      closeModal();
+    });
+  }
 
   if (modal) {
     modal.addEventListener('click', (e) => {
@@ -989,6 +1029,35 @@ function initVideoModal() {
       closeModal();
     }
   });
+
+  // Tap to play overlay for mobile browsers that defer async video play
+  if (overlay && videoEl) {
+    const triggerPlay = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      videoEl.play().then(() => {
+        overlay.style.display = 'none';
+      }).catch(err => {
+        console.warn('Manual play failed:', err);
+      });
+    };
+    overlay.addEventListener('click', triggerPlay);
+    overlay.addEventListener('touchend', triggerPlay);
+  }
+
+  if (videoEl) {
+    videoEl.addEventListener('playing', () => {
+      if (overlay) overlay.style.display = 'none';
+    });
+    videoEl.addEventListener('pause', () => {
+      // Don't re-show overlay if paused at end
+      if (videoEl.ended && overlay) {
+        overlay.style.display = 'flex';
+      }
+    });
+  }
 }
 
 function openVideoModal({ title, desc, videoUrl, bookingUrl }) {
@@ -997,17 +1066,29 @@ function openVideoModal({ title, desc, videoUrl, bookingUrl }) {
   const descEl = document.getElementById('modalVideoDesc');
   const videoEl = document.getElementById('modalVideoElement');
   const bookBtn = document.getElementById('modalBookNowBtn');
+  const overlay = document.getElementById('modalPlayOverlay');
 
   if (titleEl) titleEl.textContent = title || 'Moments Galaxy Private Cinema';
   if (descEl) descEl.textContent = desc || 'Watch demo walkthrough video';
   if (bookBtn && bookingUrl) bookBtn.href = bookingUrl;
 
+  if (modal) modal.classList.add('active');
+
   if (videoEl && videoUrl) {
     videoEl.src = videoUrl;
-    videoEl.play().catch(e => console.log('Autoplay deferred:', e));
+    videoEl.load();
+    const playPromise = videoEl.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        if (overlay) overlay.style.display = 'none';
+      }).catch(err => {
+        console.log('Mobile video autoplay blocked by browser policy, showing tap-to-play overlay:', err);
+        if (overlay) overlay.style.display = 'flex';
+      });
+    } else {
+      if (overlay) overlay.style.display = 'flex';
+    }
   }
-
-  if (modal) modal.classList.add('active');
 }
 
 /* ==========================================================================
