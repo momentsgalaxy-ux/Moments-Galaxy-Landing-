@@ -62,7 +62,7 @@
       <li><a href="https://momentsgalaxy.com/food-order" id="drawerFoodLink" target="_blank"><span>🍴 Food Menu</span> <span>›</span></a></li>
       <li><a href="https://momentsgalaxy.com/booking" id="drawerBookLink" target="_blank" style="color: var(--gold-400);"><span>📅 Book Theater Now</span> <span>›</span></a></li>
       <li><a href="#notice"><span>📢 Guidelines & Voice FAQ</span> <span>›</span></a></li>
-      <li><a href="#inquiry"><span>✉️ Inquiry Form</span> <span>›</span></a></li>
+      <li><a href="https://momentsgalaxy.com/contact" id="drawerContactLink" target="_blank" rel="noopener"><span>✉️ Contact & Inquiries</span> <span>›</span></a></li>
       <li><a href="#location"><span>📍 Location & Map</span> <span>›</span></a></li>
       <li><a href="tel:8699505560" id="drawerCallLink"><span>📞 Call +91 8699505560</span> <span>›</span></a></li>
       <li><a href="https://wa.me/918699505560" id="drawerWaLink" target="_blank"><span>💬 WhatsApp Us</span> <span>›</span></a></li>
@@ -289,7 +289,8 @@
   </section>
 
   <!-- ==========================================================================
-       07. INQUIRY FORM SECTION
+       07. INQUIRY & CONTACT SECTION
+       Requirement: "inqury form button https://momentsgalaxy.com/contact is link se connect rhegi form nhi hoga vhn"
        ========================================================================== -->
   <section class="inquiry-section" id="inquiry">
     <div class="container">
@@ -300,89 +301,57 @@
           <img src="assets/images/luxury-gift-roses.svg" alt="Luxury Celebration Gifts & Roses">
         </div>
 
-        <!-- Right: Inquiry Form -->
+        <!-- Right: Inquiry Direct Action Portal (No Form Fields) -->
         <div class="inquiry-form-col">
           <div class="inquiry-header-box">
+            <span class="inquiry-badge-tag">OFFICIAL INQUIRY PORTAL</span>
             <h3 class="inquiry-header-title text-gold-gradient">
               <span>✉️</span>
-              <span>Inquiry Form</span>
+              <span>Have Special Requests or Questions?</span>
             </h3>
-            <p class="inquiry-header-sub">Have a special request? Fill the form and we'll get back to you soon!</p>
+            <p class="inquiry-header-sub">Celebrate your milestone moments with bespoke balloon decor, rose petals, marquee lights, and private theater experiences. Click below to connect directly via our official contact portal!</p>
           </div>
 
-          <form id="inquiryForm" class="inquiry-form-grid">
-            
-            <!-- Your Name * -->
-            <div class="form-group">
-              <div class="input-icon-wrap">
-                <span class="input-icon">👤</span>
-                <input type="text" class="form-control" id="inqName" name="name" placeholder="Your Name *" required>
+          <!-- Feature perks list -->
+          <div class="inquiry-perks-grid">
+            <div class="inquiry-perk-card">
+              <span class="perk-icon">💍</span>
+              <div>
+                <strong>Surprise Proposals & Romantic Dates</strong>
+                <p>Personalized marquee letters, candle paths, fog entry, and custom song slideshows.</p>
               </div>
             </div>
 
-            <!-- WhatsApp Number * -->
-            <div class="form-group">
-              <div class="input-icon-wrap">
-                <span class="input-icon">📞</span>
-                <input type="tel" class="form-control" id="inqWhatsapp" name="whatsapp" placeholder="WhatsApp Number *" required>
+            <div class="inquiry-perk-card">
+              <span class="perk-icon">🎂</span>
+              <div>
+                <strong>Custom Cakes & Celebration Add-ons</strong>
+                <p>Heart-shaped designer cakes, fresh red roses, delicious food combos & balloon arches.</p>
               </div>
             </div>
 
-            <!-- Occasion -->
-            <div class="form-group">
-              <div class="input-icon-wrap">
-                <span class="input-icon">⭐</span>
-                <select class="form-control" id="inqOccasion" name="occasion">
-                  <option value="Birthday Celebration">Birthday Celebration</option>
-                  <option value="Anniversary Celebration">Anniversary Celebration</option>
-                  <option value="Marriage Proposal">Marriage Proposal</option>
-                  <option value="Romantic Date Night">Romantic Date Night</option>
-                  <option value="Private Movie Screening">Private Movie Screening</option>
-                  <option value="Baby Shower / Farewell">Baby Shower / Farewell</option>
-                  <option value="Other Special Occasion">Other Special Occasion</option>
-                </select>
+            <div class="inquiry-perk-card">
+              <span class="perk-icon">⚡</span>
+              <div>
+                <strong>Instant Response Guarantee</strong>
+                <p>Direct assistance for slot availability, special requests, and inquiries.</p>
               </div>
             </div>
+          </div>
 
-            <!-- Preferred Theater -->
-            <div class="form-group">
-              <div class="input-icon-wrap">
-                <span class="input-icon">👑</span>
-                <select class="form-control" id="inqTheater" name="theater">
-                  <option value="Prime Theater – Basic">Prime Theater – Basic</option>
-                  <option value="Prime Theater – With Add-ons">Prime Theater – With Add-ons</option>
-                  <option value="Star Theater – Basic">Star Theater – Basic</option>
-                  <option value="Star Theater – With Add-ons">Star Theater – With Add-ons</option>
-                  <option value="Need Recommendation">Need Recommendation</option>
-                </select>
-              </div>
-            </div>
+          <!-- Direct Inquiry Button connecting to https://momentsgalaxy.com/contact -->
+          <div class="inquiry-action-buttons-wrap">
+            <a href="https://momentsgalaxy.com/contact" class="btn-submit-inquiry" id="btnInquiryContactLink" target="_blank" rel="noopener">
+              <span>✉️</span>
+              <span>Contact & Inquire Now</span>
+              <span class="btn-arrow" style="font-size: 18px;">↗</span>
+            </a>
 
-            <!-- Event Date -->
-            <div class="form-group form-group-full">
-              <div class="input-icon-wrap">
-                <span class="input-icon">📅</span>
-                <input type="date" class="form-control" id="inqDate" name="date" required>
-              </div>
-            </div>
-
-            <!-- Additional Details -->
-            <div class="form-group form-group-full">
-              <div class="input-icon-wrap">
-                <span class="input-icon" style="top: 14px;">💬</span>
-                <textarea class="form-control" id="inqDetails" name="details" placeholder="Additional Details (e.g. number of guests, customized cake, surprises...)"></textarea>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group form-group-full">
-              <button type="submit" class="btn-submit-inquiry" id="btnSubmitInquiry">
-                <span>✈</span>
-                <span>Submit Inquiry</span>
-              </button>
-            </div>
-
-          </form>
+            <a href="https://wa.me/918699505560?text=Hi%20Moments%20Galaxy,%20I%20have%20an%20inquiry%20regarding%20booking%20a%20private%20theater!" class="btn-inquiry-secondary-wa" id="btnInquiryWaLink" target="_blank" rel="noopener">
+              <span>💬</span>
+              <span>Chat Directly on WhatsApp</span>
+            </a>
+          </div>
         </div>
 
       </div>

@@ -8,10 +8,67 @@ const STORAGE_KEY = 'moments_galaxy_data_v1';
 const INQUIRIES_KEY = 'moments_galaxy_inquiries_v1';
 const THEME_KEY = 'moments_galaxy_theme_preference';
 
+// 4 Pro Luxury Themes for Moments Galaxy
+const PRO_THEMES = {
+  'obsidian-gold': {
+    id: 'obsidian-gold',
+    name: 'Royal Obsidian Gold',
+    badge: 'SIGNATURE VIP',
+    tagline: 'Signature 5-Star VIP Cinema Luxury',
+    icon: '👑',
+    accentColor: '#dfb15b',
+    secondaryColor: '#ffeaa7',
+    bgColor: '#0b0911',
+    cardColor: '#181326',
+    gradient: 'linear-gradient(135deg, #fff3c9 0%, #dfb15b 45%, #b5832a 100%)',
+    description: 'Obsidian dark tones, deep velvet purple, and shimmering 24K pure gold accents with champagne gradients.'
+  },
+  'ruby-rose': {
+    id: 'ruby-rose',
+    name: 'Midnight Ruby Rose',
+    badge: 'ROMANCE & PROPOSALS',
+    tagline: 'Romantic Candlelight & Anniversary Special',
+    icon: '🌹',
+    accentColor: '#e63946',
+    secondaryColor: '#ff758f',
+    bgColor: '#0d060c',
+    cardColor: '#220e1d',
+    gradient: 'linear-gradient(135deg, #ff8fa3 0%, #e63946 45%, #800f2f 100%)',
+    description: 'Passionate velvet crimson, rose gold neon luminescence, and warm candlelight glow for intimate celebrations.'
+  },
+  'emerald-royalty': {
+    id: 'emerald-royalty',
+    name: 'Imperial Emerald Royalty',
+    badge: 'EXCLUSIVE VIP SUITE',
+    tagline: 'Opulent Jade & Forest Velvet Lounge',
+    icon: '💎',
+    accentColor: '#10b981',
+    secondaryColor: '#6ee7b7',
+    bgColor: '#05120d',
+    cardColor: '#0f271e',
+    gradient: 'linear-gradient(135deg, #a7f3d0 0%, #10b981 45%, #064e3b 100%)',
+    description: 'Prestige private theater lounge aesthetic with deep forest emerald obsidian, sparkling jade & mint crystals.'
+  },
+  'sapphire-galaxy': {
+    id: 'sapphire-galaxy',
+    name: 'Cosmic Sapphire Galaxy',
+    badge: 'CELESTIAL CINEMA',
+    tagline: 'Electric Starry Galaxy & Neon Cinema',
+    icon: '🌌',
+    accentColor: '#0ea5e9',
+    secondaryColor: '#7dd3fc',
+    bgColor: '#050b16',
+    cardColor: '#0e1c31',
+    gradient: 'linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 45%, #075985 100%)',
+    description: 'High-tech starry cosmos cinema theme with electric cyan sapphire accents, space dark backdrops & neon galaxy starlight.'
+  }
+};
+
 // Default Master Configuration
 const DEFAULT_CONFIG = {
   theme: {
     defaultMode: 'dark', // 'dark' or 'light'
+    colorTheme: 'obsidian-gold', // 'obsidian-gold' | 'ruby-rose' | 'emerald-royalty' | 'sapphire-galaxy'
     allowVisitorToggle: true,
     accentColor: '#dfb15b'
   },
@@ -29,7 +86,8 @@ const DEFAULT_CONFIG = {
   links: {
     addonsUrl: 'https://momentsgalaxy.com/add-ons',
     foodUrl: 'https://momentsgalaxy.com/food-order',
-    bookingUrl: 'https://momentsgalaxy.com/booking'
+    bookingUrl: 'https://momentsgalaxy.com/booking',
+    contactUrl: 'https://momentsgalaxy.com/contact'
   },
   hero: {
     welcomeSubtitle: 'Welcome to',
@@ -276,6 +334,15 @@ class GalaxyDataManager {
 
   notifyUpdate() {
     window.dispatchEvent(new CustomEvent('galaxyDataUpdated', { detail: this.data }));
+    try {
+      if (window.BroadcastChannel) {
+        const bc = new BroadcastChannel('moments_galaxy_sync');
+        bc.postMessage({ type: 'GALAXY_UPDATE', data: this.data });
+        setTimeout(() => bc.close(), 100);
+      }
+    } catch (e) {
+      // BroadcastChannel fallback silently handled
+    }
   }
 
   // --- INQUIRIES MANAGEMENT ---
@@ -331,6 +398,7 @@ class GalaxyDataManager {
 
 // Global instance
 window.GalaxyData = new GalaxyDataManager();
+window.PRO_THEMES = PRO_THEMES;
 
 /* ==========================================================================
    INDEXED-DB MEDIA STORAGE ENGINE

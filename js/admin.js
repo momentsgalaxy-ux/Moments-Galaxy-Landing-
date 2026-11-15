@@ -60,8 +60,7 @@ function initAdminPanel() {
   initTheatersEditor(data);
   initCouponsEditor(data);
   initFaqsEditor(data);
-  renderInquiriesTable();
-  initMediaUploader();
+  initThemeStudio(data);
   initBackupAndReset();
 
   // Save All Changes Master Button
@@ -104,12 +103,6 @@ function initTabNavigation() {
    ========================================================================== */
 function populateFormFields(data) {
   // Stats
-  const inquiries = window.GalaxyData.getInquiries();
-  const statInq = document.getElementById('statInquiries');
-  const inqBadge = document.getElementById('inquiriesCountBadge');
-  if (statInq) statInq.textContent = inquiries.length;
-  if (inqBadge) inqBadge.textContent = inquiries.length;
-
   const statCoup = document.getElementById('statCoupons');
   const coupBadge = document.getElementById('couponsStateBadge');
   const isCoupOn = data.coupons && data.coupons.enabled;
@@ -134,6 +127,7 @@ function populateFormFields(data) {
   setValue('linkAddonsInput', data.links.addonsUrl);
   setValue('linkFoodInput', data.links.foodUrl);
   setValue('linkBookingInput', data.links.bookingUrl);
+  setValue('linkContactInput', (data.links && data.links.contactUrl) || 'https://momentsgalaxy.com/contact');
 
   // Private Theater Pricing Display Toggle
   const toggleTheaterPrices = document.getElementById('toggleTheaterPrices');
@@ -199,10 +193,13 @@ function populateFormFields(data) {
   setValue('contactYtInput', data.contact.youtubeUrl);
   setValue('contactFbInput', data.contact.facebookUrl);
 
-  // Theme & Appearance
+  // Theme & Appearance (4 Pro Themes)
   setValue('themeDefaultModeSelect', data.theme.defaultMode || 'dark');
   setValue('themeVisitorToggleSelect', String(data.theme.allowVisitorToggle));
   setValue('themeAccentColorInput', data.theme.accentColor || '#dfb15b');
+  setValue('themeAccentColorHexText', data.theme.accentColor || '#dfb15b');
+  selectedThemeId = (data.theme && data.theme.colorTheme) || 'obsidian-gold';
+  renderThemeSelectionUI(selectedThemeId);
 }
 
 function setValue(id, val) {
@@ -675,167 +672,6 @@ function initFaqsEditor(data) {
 }
 
 /* ==========================================================================
-   INQUIRIES LEADS TABLE
-   ========================================================================== */
-function renderInquiriesTable() {
-  const tbody = document.getElementById('inquiriesTableBody');
-  const exportBtn = document.getElementById('btnExportInquiries');
-  const clearBtn = document.getElementById('btnClearInquiries');
-
-  if (!tbody) return;
-
-  const inquiries = window.GalaxyData.getInquiries();
-  tbody.innerHTML = '';
-
-  if (inquiries.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">
-          No customer inquiries received yet. Submit an inquiry on the landing page to test! ✨
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  inquiries.forEach(inq => {
-    const tr = document.createElement('tr');
-    const createdDate = new Date(inq.createdAt).toLocaleDateString('en-IN', {
-      day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-    });
-
-    const cleanPhone = (inq.whatsapp || '').replace(/\D/g, '');
-
-    tr.innerHTML = `
-      <td style="white-space: nowrap; color: var(--text-muted); font-size: 12px;">${createdDate}</td>
-      <td style="font-weight: 700; color: #fff;">${inq.name}</td>
-      <td>
-        <span style="font-family: monospace; font-size: 13px;">${inq.whatsapp}</span>
-      </td>
-      <td>${inq.occasion || 'Celebration'}</td>
-      <td><span class="sidebar-badge" style="font-size: 11px;">${inq.theater}</span></td>
-      <td>${inq.date || 'TBD'}</td>
-      <td style="max-width: 220px; font-size: 12.5px; color: var(--text-muted);">${inq.details || '—'}</td>
-      <td>
-        <select class="field-select inq-status-select" data-id="${inq.id}" style="padding: 4px 8px; font-size: 12px; width: 110px;">
-          <option value="New" ${inq.status === 'New' ? 'selected' : ''}>New</option>
-          <option value="Contacted" ${inq.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
-          <option value="Booked" ${inq.status === 'Booked' ? 'selected' : ''}>Booked</option>
-          <option value="Archived" ${inq.status === 'Archived' ? 'selected' : ''}>Archived</option>
-        </select>
-      </td>
-      <td style="white-space: nowrap;">
-        <!-- WhatsApp Direct -->
-        <a href="https://wa.me/91${cleanPhone}?text=Hi%20${encodeURIComponent(inq.name)},%20thank%20you%20for%20contacting%20Moments%20Galaxy!%20Regarding%20your%20${encodeURIComponent(inq.occasion)}%20booking:" 
-           target="_blank" class="action-btn-circle wa-btn" title="Chat with customer on WhatsApp">
-          💬
-        </a>
-        <!-- Call Direct -->
-        <a href="tel:${cleanPhone}" class="action-btn-circle call-btn" title="Call Customer">
-          📞
-        </a>
-        <!-- Delete Lead -->
-        <button type="button" class="action-btn-circle btn-del-inq" data-id="${inq.id}" title="Delete Lead" style="background: rgba(214,48,49,0.2); border-color: var(--danger); color: #ff7675; cursor: pointer;">
-          ✕
-        </button>
-      </td>
-    `;
-
-    // Status change listener
-    const statusSelect = tr.querySelector('.inq-status-select');
-    statusSelect.onchange = (e) => {
-      window.GalaxyData.updateInquiryStatus(inq.id, e.target.value);
-      showAdminToast(`Inquiry marked as ${e.target.value}!`);
-    };
-
-    // Delete listener
-    const delBtn = tr.querySelector('.btn-del-inq');
-    delBtn.onclick = () => {
-      if (confirm(`Delete inquiry from ${inq.name}?`)) {
-        window.GalaxyData.deleteInquiry(inq.id);
-        renderInquiriesTable();
-        showAdminToast('Inquiry deleted');
-      }
-    };
-
-    tbody.appendChild(tr);
-  });
-
-  // Export CSV
-  if (exportBtn) {
-    exportBtn.onclick = () => {
-      exportInquiriesToCSV(inquiries);
-    };
-  }
-
-  // Clear All
-  if (clearBtn) {
-    clearBtn.onclick = () => {
-      if (confirm('Are you sure you want to clear all inquiries?')) {
-        window.GalaxyData.clearAllInquiries();
-        renderInquiriesTable();
-        showAdminToast('All inquiries cleared');
-      }
-    };
-  }
-}
-
-function exportInquiriesToCSV(inquiries) {
-  if (!inquiries || inquiries.length === 0) {
-    alert('No inquiries to export');
-    return;
-  }
-
-  const headers = ['ID', 'Date', 'Name', 'WhatsApp', 'Occasion', 'Theater', 'EventDate', 'Details', 'Status'];
-  const rows = inquiries.map(i => [
-    i.id,
-    `"${new Date(i.createdAt).toLocaleString()}"`,
-    `"${i.name.replace(/"/g, '""')}"`,
-    `"${i.whatsapp}"`,
-    `"${i.occasion}"`,
-    `"${i.theater}"`,
-    `"${i.date}"`,
-    `"${(i.details || '').replace(/"/g, '""')}"`,
-    `"${i.status}"`
-  ]);
-
-  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', `moments_galaxy_inquiries_${new Date().toISOString().slice(0, 10)}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-/* ==========================================================================
-   MEDIA UPLOADER (LOCAL FILE READING TO BLOB/DATA URL)
-   ========================================================================== */
-function initMediaUploader() {
-  const fileInput = document.getElementById('mediaFileInput');
-  const feedback = document.getElementById('mediaUploadFeedback');
-  const urlInput = document.getElementById('mediaGeneratedUrl');
-
-  if (!fileInput) return;
-
-  fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const resultDataUrl = event.target.result;
-      if (urlInput) urlInput.value = resultDataUrl;
-      if (feedback) feedback.style.display = 'block';
-      showAdminToast(`Loaded ${file.name}! URL ready to copy.`);
-    };
-
-    reader.readAsDataURL(file);
-  });
-}
-
-/* ==========================================================================
    BACKUP, EXPORT & RESTORE
    ========================================================================== */
 function initBackupAndReset() {
@@ -941,9 +777,10 @@ function saveAllAdminChanges() {
 
   // 3. Quick Links
   const links = {
-    addonsUrl: document.getElementById('linkAddonsInput').value,
-    foodUrl: document.getElementById('linkFoodInput').value,
-    bookingUrl: document.getElementById('linkBookingInput').value
+    addonsUrl: document.getElementById('linkAddonsInput').value.trim(),
+    foodUrl: document.getElementById('linkFoodInput').value.trim(),
+    bookingUrl: document.getElementById('linkBookingInput').value.trim(),
+    contactUrl: (document.getElementById('linkContactInput') ? document.getElementById('linkContactInput').value.trim() : 'https://momentsgalaxy.com/contact')
   };
 
   // 4. Coupons
@@ -1020,9 +857,10 @@ function saveAllAdminChanges() {
     facebookUrl: document.getElementById('contactFbInput').value.trim()
   };
 
-  // 8. Theme
+  // 8. Theme (4 Pro Themes)
   const theme = {
     ...current.theme,
+    colorTheme: selectedThemeId || (current.theme && current.theme.colorTheme) || 'obsidian-gold',
     defaultMode: document.getElementById('themeDefaultModeSelect').value,
     allowVisitorToggle: document.getElementById('themeVisitorToggleSelect').value === 'true',
     accentColor: document.getElementById('themeAccentColorInput').value
@@ -1054,4 +892,139 @@ function showAdminToast(msg) {
   setTimeout(() => {
     toast.style.display = 'none';
   }, 3500);
+}
+
+/* ==========================================================================
+   4 PRO LUXURY THEMES STUDIO CONTROLLER (100% REACTIVE)
+   Selectable in Admin for the Website
+   ========================================================================== */
+let selectedThemeId = 'obsidian-gold';
+
+function initThemeStudio(data) {
+  selectedThemeId = (data.theme && data.theme.colorTheme) || 'obsidian-gold';
+  renderThemeSelectionUI(selectedThemeId);
+
+  // Bind click handlers to theme cards & select buttons
+  const themeCards = document.querySelectorAll('.theme-card');
+  themeCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const themeId = card.getAttribute('data-theme-id');
+      if (themeId) {
+        applyProThemeSelection(themeId, true);
+      }
+    });
+  });
+
+  // Bind accent color picker & hex text input two-way sync
+  const colorInput = document.getElementById('themeAccentColorInput');
+  const hexInput = document.getElementById('themeAccentColorHexText');
+  if (colorInput && hexInput) {
+    colorInput.addEventListener('input', () => {
+      hexInput.value = colorInput.value;
+      updateCustomAccentInRealTime(colorInput.value);
+    });
+    hexInput.addEventListener('input', () => {
+      if (/^#[0-9A-Fa-f]{6}$/.test(hexInput.value)) {
+        colorInput.value = hexInput.value;
+        updateCustomAccentInRealTime(hexInput.value);
+      }
+    });
+  }
+
+  // Bind live sandbox light/dark preview toggle
+  const btnToggleMode = document.getElementById('btnPreviewToggleMode');
+  const sandbox = document.getElementById('themeLiveSandbox');
+  const modeIcon = document.getElementById('previewModeIcon');
+  const modeText = document.getElementById('previewModeText');
+  if (btnToggleMode && sandbox) {
+    btnToggleMode.addEventListener('click', () => {
+      const currentMode = sandbox.getAttribute('data-preview-mode') || 'dark';
+      const nextMode = currentMode === 'dark' ? 'light' : 'dark';
+      sandbox.setAttribute('data-preview-mode', nextMode);
+      if (modeIcon) modeIcon.textContent = nextMode === 'light' ? '🌙' : '☀️';
+      if (modeText) modeText.textContent = nextMode === 'light' ? 'Preview Dark' : 'Preview Light';
+    });
+  }
+}
+
+function updateCustomAccentInRealTime(hexColor) {
+  const current = window.GalaxyData.data;
+  current.theme = {
+    ...current.theme,
+    accentColor: hexColor
+  };
+  window.GalaxyData.saveConfig(current);
+}
+
+function applyProThemeSelection(themeId, autoSave = false) {
+  const themeMeta = (window.PRO_THEMES && window.PRO_THEMES[themeId]) || {
+    name: 'Royal Obsidian Gold',
+    badge: 'SIGNATURE VIP',
+    accentColor: '#dfb15b'
+  };
+
+  selectedThemeId = themeId;
+  renderThemeSelectionUI(themeId);
+
+  // Update accent input with default theme accent
+  const colorInput = document.getElementById('themeAccentColorInput');
+  const hexInput = document.getElementById('themeAccentColorHexText');
+  if (colorInput && hexInput) {
+    colorInput.value = themeMeta.accentColor;
+    hexInput.value = themeMeta.accentColor;
+  }
+
+  if (autoSave) {
+    const current = window.GalaxyData.data;
+    current.theme = {
+      ...current.theme,
+      colorTheme: themeId,
+      accentColor: themeMeta.accentColor
+    };
+    window.GalaxyData.saveConfig(current);
+    showAdminToast(`✨ "${themeMeta.name}" selected & applied to website live!`);
+  }
+}
+
+function renderThemeSelectionUI(themeId) {
+  const themeMeta = (window.PRO_THEMES && window.PRO_THEMES[themeId]) || {
+    name: 'Royal Obsidian Gold',
+    badge: 'SIGNATURE VIP',
+    icon: '👑'
+  };
+
+  // Update theme cards active class & select button text
+  document.querySelectorAll('.theme-card').forEach(card => {
+    const id = card.getAttribute('data-theme-id');
+    const selectBtn = card.querySelector('.btn-select-theme .btn-text');
+    if (id === themeId) {
+      card.classList.add('active');
+      if (selectBtn) selectBtn.textContent = 'Active Theme ✓';
+    } else {
+      card.classList.remove('active');
+      if (selectBtn) selectBtn.textContent = 'Select Theme';
+    }
+  });
+
+  // Update top active indicators
+  const activeName = document.getElementById('activeThemeNameDisplay');
+  if (activeName) activeName.textContent = themeMeta.name;
+
+  const sidebarBadge = document.getElementById('themeActiveSidebarBadge');
+  if (sidebarBadge) {
+    const shortName = themeMeta.name.replace('Royal ', '').replace('Midnight ', '').replace('Imperial ', '').replace('Cosmic ', '');
+    sidebarBadge.textContent = `${themeMeta.icon || '🎨'} ${shortName}`;
+  }
+
+  // Update Live Sandbox in real-time
+  const sandbox = document.getElementById('themeLiveSandbox');
+  if (sandbox) {
+    sandbox.setAttribute('data-color-theme', themeId);
+  }
+
+  const sandboxChip = document.getElementById('sandboxChip');
+  if (sandboxChip) sandboxChip.textContent = themeMeta.badge || 'VIP';
+
+  const sandboxGradientText = document.getElementById('sandboxGradientText');
+  if (sandboxGradientText) sandboxGradientText.textContent = `${themeMeta.name} VIP Experience`;
 }

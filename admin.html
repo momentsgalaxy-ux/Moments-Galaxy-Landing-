@@ -42,16 +42,16 @@
         </button>
       </li>
       <li>
-        <button type="button" class="nav-item-btn" data-tab="tabHero">
-          <span class="nav-icon">✨</span>
-          <span>Hero & Welcome</span>
-        </button>
-      </li>
-      <li>
         <button type="button" class="nav-item-btn" data-tab="tabTheaters">
           <span class="nav-icon">🎬</span>
           <span>Theaters & Pricing</span>
           <span class="sidebar-badge" id="theatersPriceBadge" style="background: rgba(223, 177, 91, 0.2); color: var(--gold-300);">Prices ON</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="nav-item-btn" data-tab="tabHero">
+          <span class="nav-icon">✨</span>
+          <span>Hero & Welcome</span>
         </button>
       </li>
       <li>
@@ -74,10 +74,9 @@
         </button>
       </li>
       <li>
-        <button type="button" class="nav-item-btn" data-tab="tabInquiries">
-          <span class="nav-icon">✉️</span>
-          <span>Inquiries Inbox</span>
-          <span class="badge-count" id="inquiriesCountBadge">0</span>
+        <button type="button" class="nav-item-btn" data-tab="tabContacts">
+          <span class="nav-icon">📞</span>
+          <span>Contacts & Socials</span>
         </button>
       </li>
       <li>
@@ -87,21 +86,10 @@
         </button>
       </li>
       <li>
-        <button type="button" class="nav-item-btn" data-tab="tabContacts">
-          <span class="nav-icon">📞</span>
-          <span>Contacts & Socials</span>
-        </button>
-      </li>
-      <li>
         <button type="button" class="nav-item-btn" data-tab="tabTheme">
           <span class="nav-icon">🎨</span>
-          <span>Light / Dark Theme</span>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="nav-item-btn" data-tab="tabMedia">
-          <span class="nav-icon">📁</span>
-          <span>Media Uploader</span>
+          <span>Theme & Colors</span>
+          <span class="sidebar-badge" id="themeActiveSidebarBadge">👑 Royal Gold</span>
         </button>
       </li>
       <li>
@@ -155,15 +143,15 @@
       <section class="tab-pane active" id="tabDashboard">
         <div class="form-grid-3">
           <div class="admin-card" style="text-align: center;">
-            <div style="font-size: 32px; color: var(--gold-400);" id="statInquiries">0</div>
-            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">TOTAL INQUIRIES</div>
+            <div style="font-size: 28px; color: var(--gold-400);">2 Theaters</div>
+            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">PRIME & STAR</div>
           </div>
           <div class="admin-card" style="text-align: center;">
-            <div style="font-size: 32px; color: #55efc4;" id="statCoupons">Active</div>
+            <div style="font-size: 28px; color: #55efc4;" id="statCoupons">Active</div>
             <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">COUPONS STATUS</div>
           </div>
           <div class="admin-card" style="text-align: center;">
-            <div style="font-size: 26px; color: var(--gold-400);" id="statTheaters">Prices ON</div>
+            <div style="font-size: 28px; color: var(--gold-400);" id="statTheaters">Prices ON</div>
             <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">DEMO & PRICING</div>
           </div>
         </div>
@@ -327,6 +315,12 @@
             <input type="url" class="field-input" id="linkBookingInput" placeholder="https://momentsgalaxy.com/booking">
             <small style="color: var(--text-muted); font-size: 12px;">Default: https://momentsgalaxy.com/booking</small>
           </div>
+
+          <div class="form-field">
+            <label class="field-label">4. Inquiry / Contact Button Link (✉️)</label>
+            <input type="url" class="field-input" id="linkContactInput" placeholder="https://momentsgalaxy.com/contact">
+            <small style="color: var(--text-muted); font-size: 12px;">Default: https://momentsgalaxy.com/contact — All inquiry buttons on the landing page connect to this link.</small>
+          </div>
         </div>
       </section>
 
@@ -460,53 +454,7 @@
       </section>
 
       <!-- ====================================================================
-           TAB 6: INQUIRIES INBOX (LEAD MANAGER)
-           ==================================================================== -->
-      <section class="tab-pane" id="tabInquiries">
-        <div class="admin-card">
-          <div class="card-header-bar">
-            <div>
-              <div class="card-title">✉️ Customer Inquiries & Leads Inbox</div>
-              <div class="card-desc">Real-time leads submitted via the inquiry form. Click WhatsApp to chat directly!</div>
-            </div>
-
-            <div style="display: flex; gap: 8px;">
-              <button type="button" class="btn-header-view" id="btnExportInquiries">
-                <span>📥</span>
-                <span>Export CSV</span>
-              </button>
-              <button type="button" class="btn-remove-row" id="btnClearInquiries">
-                <span>🗑️</span>
-                <span>Clear All</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="table-container">
-            <table class="inquiries-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Customer Name</th>
-                  <th>WhatsApp / Phone</th>
-                  <th>Occasion</th>
-                  <th>Preferred Theater</th>
-                  <th>Event Date</th>
-                  <th>Details / Notes</th>
-                  <th>Status</th>
-                  <th>Direct Actions</th>
-                </tr>
-              </thead>
-              <tbody id="inquiriesTableBody">
-                <!-- Dynamically populated rows -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====================================================================
-           TAB 7: MAP & GOOGLE LOCATION
+           TAB: MAP & GOOGLE LOCATION
            Coordinates: 30.726564696917464, 76.7252708362585
            ==================================================================== -->
       <section class="tab-pane" id="tabLocation">
@@ -607,21 +555,248 @@
            Requirement: "UI light and dark mode control from admin"
            ==================================================================== -->
       <section class="tab-pane" id="tabTheme">
+        <!-- 4 Pro Themes Selection Card -->
         <div class="admin-card">
           <div class="card-header-bar">
             <div>
-              <div class="card-title">🎨 UI Light and Dark Mode Control</div>
-              <div class="card-desc">Set default theme mode for visitors and control theme switch visibility.</div>
+              <div class="card-title">🎨 Website Pro Themes & Color Styling</div>
+              <div class="card-desc">Select 1 of 4 ultra-luxury color themes for the website. Changes are 100% reactive & sync live in real-time to the landing page.</div>
+            </div>
+            <div class="theme-active-indicator" id="themeActivePill">
+              <span class="active-dot"></span>
+              <span>Active on Website: <strong id="activeThemeNameDisplay">Royal Obsidian Gold</strong></span>
+            </div>
+          </div>
+
+          <!-- 4 Pro Theme Cards Grid -->
+          <div class="theme-selection-grid">
+            <!-- Theme 1: Obsidian Gold -->
+            <div class="theme-card active" data-theme-id="obsidian-gold">
+              <div class="theme-card-top">
+                <div class="theme-icon-wrap" style="background: rgba(223, 177, 91, 0.15); border-color: #dfb15b; color: #dfb15b;">
+                  👑
+                </div>
+                <div class="theme-card-status">
+                  <span class="theme-badge-tag tag-gold">SIGNATURE VIP</span>
+                  <span class="theme-selected-check">✓ ACTIVE</span>
+                </div>
+              </div>
+              <div class="theme-card-body">
+                <h3 class="theme-title">Royal Obsidian Gold</h3>
+                <p class="theme-subtitle">Signature 5-Star VIP Cinema Luxury</p>
+                <p class="theme-desc">Obsidian dark tones, deep velvet purple, and shimmering 24K pure gold accents with champagne gradients.</p>
+              </div>
+              <!-- Color Swatches -->
+              <div class="theme-swatches-row">
+                <div class="swatch" style="background: #dfb15b;" title="Primary Accent: Royal Gold (#dfb15b)"></div>
+                <div class="swatch" style="background: #ffeaa7;" title="Secondary: Champagne (#ffeaa7)"></div>
+                <div class="swatch" style="background: #181326;" title="Surface Card (#181326)"></div>
+                <div class="swatch" style="background: #0b0911;" title="Primary Dark BG (#0b0911)"></div>
+                <div class="theme-gradient-strip" style="background: linear-gradient(90deg, #fff3c9, #dfb15b, #b5832a);"></div>
+              </div>
+              <div class="theme-card-actions">
+                <button type="button" class="btn-select-theme" data-theme="obsidian-gold">
+                  <span class="btn-icon">⚡</span>
+                  <span class="btn-text">Select Theme</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Theme 2: Ruby Rose -->
+            <div class="theme-card" data-theme-id="ruby-rose">
+              <div class="theme-card-top">
+                <div class="theme-icon-wrap" style="background: rgba(230, 57, 70, 0.15); border-color: #e63946; color: #ff758f;">
+                  🌹
+                </div>
+                <div class="theme-card-status">
+                  <span class="theme-badge-tag tag-ruby">ROMANCE & PROPOSALS</span>
+                  <span class="theme-selected-check">✓ ACTIVE</span>
+                </div>
+              </div>
+              <div class="theme-card-body">
+                <h3 class="theme-title">Midnight Ruby Rose</h3>
+                <p class="theme-subtitle">Romantic Candlelight & Anniversary Special</p>
+                <p class="theme-desc">Passionate velvet crimson, rose gold neon luminescence, and warm candlelight glow for intimate celebrations.</p>
+              </div>
+              <div class="theme-swatches-row">
+                <div class="swatch" style="background: #e63946;" title="Primary Accent: Ruby Red (#e63946)"></div>
+                <div class="swatch" style="background: #ff758f;" title="Secondary: Rose Gold (#ff758f)"></div>
+                <div class="swatch" style="background: #220e1d;" title="Surface Wine (#220e1d)"></div>
+                <div class="swatch" style="background: #0d060c;" title="Midnight BG (#0d060c)"></div>
+                <div class="theme-gradient-strip" style="background: linear-gradient(90deg, #ff8fa3, #e63946, #800f2f);"></div>
+              </div>
+              <div class="theme-card-actions">
+                <button type="button" class="btn-select-theme" data-theme="ruby-rose">
+                  <span class="btn-icon">⚡</span>
+                  <span class="btn-text">Select Theme</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Theme 3: Emerald Royalty -->
+            <div class="theme-card" data-theme-id="emerald-royalty">
+              <div class="theme-card-top">
+                <div class="theme-icon-wrap" style="background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #34d399;">
+                  💎
+                </div>
+                <div class="theme-card-status">
+                  <span class="theme-badge-tag tag-emerald">EXCLUSIVE VIP SUITE</span>
+                  <span class="theme-selected-check">✓ ACTIVE</span>
+                </div>
+              </div>
+              <div class="theme-card-body">
+                <h3 class="theme-title">Imperial Emerald Royalty</h3>
+                <p class="theme-subtitle">Opulent Jade & Forest Velvet Lounge</p>
+                <p class="theme-desc">Prestige private theater lounge aesthetic with deep forest emerald obsidian, sparkling jade & mint crystals.</p>
+              </div>
+              <div class="theme-swatches-row">
+                <div class="swatch" style="background: #10b981;" title="Primary Accent: Jade Emerald (#10b981)"></div>
+                <div class="swatch" style="background: #6ee7b7;" title="Secondary: Mint Jade (#6ee7b7)"></div>
+                <div class="swatch" style="background: #0f271e;" title="Surface Forest (#0f271e)"></div>
+                <div class="swatch" style="background: #05120d;" title="Forest Obsidian BG (#05120d)"></div>
+                <div class="theme-gradient-strip" style="background: linear-gradient(90deg, #a7f3d0, #10b981, #064e3b);"></div>
+              </div>
+              <div class="theme-card-actions">
+                <button type="button" class="btn-select-theme" data-theme="emerald-royalty">
+                  <span class="btn-icon">⚡</span>
+                  <span class="btn-text">Select Theme</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Theme 4: Sapphire Galaxy -->
+            <div class="theme-card" data-theme-id="sapphire-galaxy">
+              <div class="theme-card-top">
+                <div class="theme-icon-wrap" style="background: rgba(14, 165, 233, 0.15); border-color: #0ea5e9; color: #38bdf8;">
+                  🌌
+                </div>
+                <div class="theme-card-status">
+                  <span class="theme-badge-tag tag-sapphire">CELESTIAL CINEMA</span>
+                  <span class="theme-selected-check">✓ ACTIVE</span>
+                </div>
+              </div>
+              <div class="theme-card-body">
+                <h3 class="theme-title">Cosmic Sapphire Galaxy</h3>
+                <p class="theme-subtitle">Electric Starry Galaxy & Neon Cinema</p>
+                <p class="theme-desc">High-tech starry cosmos cinema theme with electric cyan sapphire accents, space dark backdrops & neon galaxy starlight.</p>
+              </div>
+              <div class="theme-swatches-row">
+                <div class="swatch" style="background: #0ea5e9;" title="Primary Accent: Electric Sapphire (#0ea5e9)"></div>
+                <div class="swatch" style="background: #7dd3fc;" title="Secondary: Star Cyan (#7dd3fc)"></div>
+                <div class="swatch" style="background: #0e1c31;" title="Surface Cosmos (#0e1c31)"></div>
+                <div class="swatch" style="background: #050b16;" title="Space Cosmos BG (#050b16)"></div>
+                <div class="theme-gradient-strip" style="background: linear-gradient(90deg, #7dd3fc, #0ea5e9, #075985);"></div>
+              </div>
+              <div class="theme-card-actions">
+                <button type="button" class="btn-select-theme" data-theme="sapphire-galaxy">
+                  <span class="btn-icon">⚡</span>
+                  <span class="btn-text">Select Theme</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Reactive Website Preview Box -->
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">⚡ Live Reactive Website Preview</div>
+              <div class="card-desc">Instant real-time simulation of how the selected theme looks on buttons, headings, cards, and glowing badges.</div>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button type="button" class="btn-preview-refresh" id="btnPreviewToggleMode" title="Toggle Preview Light/Dark Mode">
+                <span id="previewModeIcon">☀️</span>
+                <span id="previewModeText">Preview Light</span>
+              </button>
+              <a href="index.html" class="btn-header-view" target="_blank" rel="noopener">
+                <span>👁️ Open Live Website</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive Simulated Website Component Sandbox -->
+          <div class="theme-live-sandbox" id="themeLiveSandbox" data-color-theme="obsidian-gold">
+            <div class="sandbox-header-bar">
+              <div class="sandbox-logo-area">
+                <img src="assets/images/logo.png" alt="Logo" class="sandbox-logo">
+                <span class="sandbox-chip" id="sandboxChip">VIP SIGNATURE</span>
+              </div>
+              <div class="sandbox-nav-pills">
+                <span class="sandbox-pill active">Star Theater</span>
+                <span class="sandbox-pill">Prime VIP</span>
+                <span class="sandbox-pill">Food & Cakes</span>
+              </div>
+            </div>
+
+            <div class="sandbox-body-grid">
+              <!-- Showcase Card Simulation -->
+              <div class="sandbox-card">
+                <div class="sandbox-card-badge" id="sandboxCardBadge">🔥 POPULAR CELEBRATION</div>
+                <h4 class="sandbox-card-title">Star Theater – Basic</h4>
+                <p class="sandbox-card-desc">Romantic mini cinema setup with surround Dolby audio and custom balloon decor.</p>
+                
+                <div class="sandbox-price-row">
+                  <div>
+                    <span class="sandbox-price-label">Special Offer</span>
+                    <div class="sandbox-price-val" id="sandboxPriceVal">₹1,999 <small>/ 4 Guests</small></div>
+                  </div>
+                  <button type="button" class="sandbox-btn-primary" id="sandboxBtnAction">
+                    <span>📅 Book VIP Now</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Component Highlights Simulation -->
+              <div class="sandbox-card">
+                <h4 class="sandbox-card-title" style="font-size: 16px; margin-bottom: 12px;">Active Theme Palette Elements</h4>
+                
+                <div class="sandbox-palette-demo">
+                  <div class="sandbox-demo-item">
+                    <span class="demo-label">Theme Gradient Banner:</span>
+                    <div class="sandbox-gradient-bar" id="sandboxGradientBar">
+                      <span id="sandboxGradientText">Royal Moments Galaxy Experience</span>
+                    </div>
+                  </div>
+
+                  <div class="sandbox-demo-item">
+                    <span class="demo-label">Discount Coupon Pill:</span>
+                    <div class="sandbox-coupon-pill" id="sandboxCouponPill">
+                      <span>🏷️ GALAXY500</span>
+                      <strong>₹500 FLAT OFF</strong>
+                    </div>
+                  </div>
+
+                  <div class="sandbox-demo-item">
+                    <span class="demo-label">Action Buttons & Glow:</span>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                      <button type="button" class="sandbox-btn-primary" style="padding: 8px 16px; font-size: 12.5px;">Primary VIP</button>
+                      <button type="button" class="sandbox-btn-outline" id="sandboxBtnOutline" style="padding: 8px 16px; font-size: 12.5px;">Outline Glow</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visitor Experience & Settings -->
+        <div class="admin-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-title">⚙️ Visitor Experience & Appearance Settings</div>
+              <div class="card-desc">Configure default lighting mode and whether visitors can switch between Light/Dark mode.</div>
             </div>
           </div>
 
           <div class="form-grid-2">
             <div class="form-field">
-              <label class="field-label">Default Landing Page Theme Mode</label>
+              <label class="field-label">Default Landing Page Lighting Mode</label>
               <select class="field-select" id="themeDefaultModeSelect">
-                <option value="dark">Dark Luxury (Obsidian & Gold - Mockup Default)</option>
+                <option value="dark">Dark Luxury (Recommended for Private Theater)</option>
                 <option value="light">Light Luxury (Champagne & Velvet)</option>
               </select>
+              <span class="field-help" style="font-size: 12px; color: var(--text-muted); margin-top: 4px; display: block;">Visitors will initially see the site in this mode.</span>
             </div>
 
             <div class="form-field">
@@ -630,50 +805,23 @@
                 <option value="true">Yes (Show Sun/Moon toggle button in header)</option>
                 <option value="false">No (Lock to Default Theme only)</option>
               </select>
+              <span class="field-help" style="font-size: 12px; color: var(--text-muted); margin-top: 4px; display: block;">Show or hide the floating sun/moon toggle button in the website header.</span>
             </div>
           </div>
 
-          <div class="form-field">
-            <label class="field-label">Primary Gold Accent Color</label>
-            <input type="color" class="field-input" id="themeAccentColorInput" value="#dfb15b" style="height: 44px; padding: 4px; cursor: pointer;">
+          <div class="form-field" style="margin-top: 14px;">
+            <label class="field-label">Primary Accent Color (Auto-synced with selected theme)</label>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <input type="color" class="field-input" id="themeAccentColorInput" value="#dfb15b" style="height: 44px; width: 60px; padding: 4px; cursor: pointer;">
+              <input type="text" class="field-input" id="themeAccentColorHexText" value="#dfb15b" style="max-width: 140px; font-family: monospace;">
+              <span style="font-size: 12px; color: var(--text-muted);">Auto-updates when you pick any theme, or enter a custom hex.</span>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- ====================================================================
-           TAB 10: MEDIA UPLOADER (AUDIO & VIDEOS)
-           Requirement: "Admin dynemic upload audio-videos etc."
-           ==================================================================== -->
-      <section class="tab-pane" id="tabMedia">
-        <div class="admin-card">
-          <div class="card-header-bar">
-            <div>
-              <div class="card-title">📁 Dynamic Media Uploader (Audio & Videos)</div>
-              <div class="card-desc">Upload custom video clips or audio voice recordings directly into local storage.</div>
-            </div>
-          </div>
-
-          <div style="border: 2px dashed var(--gold-border); padding: 36px 20px; text-align: center; border-radius: var(--radius-lg); margin-bottom: 24px;">
-            <div style="font-size: 38px; margin-bottom: 8px;">📤</div>
-            <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Choose Audio or Video File to Upload</div>
-            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Supports MP4, WebM, MP3, WAV, M4A, JPG, PNG, SVG</div>
-            
-            <input type="file" id="mediaFileInput" accept="video/*,audio/*,image/*" style="display: none;">
-            <button type="button" class="btn-header-save" onclick="document.getElementById('mediaFileInput').click()">
-              Select Media File
-            </button>
-          </div>
-
-          <div id="mediaUploadFeedback" style="display: none; background: var(--admin-card-inner); border: 1px solid var(--gold-500); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
-            <div style="font-weight: 700; color: var(--gold-300); margin-bottom: 6px;">Media Loaded Successfully! 🎉</div>
-            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Generated Data/Object URL (Copy and paste into any video or audio field):</div>
-            <input type="text" class="field-input" id="mediaGeneratedUrl" readonly onclick="this.select()">
-          </div>
-        </div>
-      </section>
-
-      <!-- ====================================================================
-           TAB 11: BACKUP & RESTORE
+           TAB: BACKUP & RESTORE
            ==================================================================== -->
       <section class="tab-pane" id="tabBackup">
         <div class="admin-card">

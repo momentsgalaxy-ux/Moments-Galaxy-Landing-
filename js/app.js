@@ -21,7 +21,7 @@ function initApp() {
   renderNoticeAndVoiceFaq(data);
   renderCelebrateAndContacts(data);
   renderGoogleMap(data);
-  initInquiryForm(data);
+  renderInquirySection(data);
   initVideoModal();
 
   // Listen for real-time updates from Admin Panel (across tabs or in-page)
@@ -34,17 +34,64 @@ function initApp() {
     renderNoticeAndVoiceFaq(updatedData);
     renderCelebrateAndContacts(updatedData);
     renderGoogleMap(updatedData);
+    renderInquirySection(updatedData);
     initTheme(updatedData);
+  });
+
+  // Cross-tab Real-time Reactive Sync via BroadcastChannel
+  try {
+    if (window.BroadcastChannel) {
+      const bc = new BroadcastChannel('moments_galaxy_sync');
+      bc.onmessage = (e) => {
+        if (e.data && e.data.data) {
+          const fresh = e.data.data;
+          renderHero(fresh);
+          renderTheaters(fresh);
+          renderQuickButtons(fresh);
+          renderCoupons(fresh);
+          renderNoticeAndVoiceFaq(fresh);
+          renderCelebrateAndContacts(fresh);
+          renderGoogleMap(fresh);
+          renderInquirySection(fresh);
+          initTheme(fresh);
+        }
+      };
+    }
+  } catch (err) {
+    // BroadcastChannel fallback
+  }
+
+  // Cross-tab fallback via storage event
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'moments_galaxy_data_v1' || e.key === 'moments_galaxy_active_theme') {
+      const fresh = window.GalaxyData.loadConfig();
+      renderHero(fresh);
+      renderTheaters(fresh);
+      renderQuickButtons(fresh);
+      renderCoupons(fresh);
+      renderNoticeAndVoiceFaq(fresh);
+      renderCelebrateAndContacts(fresh);
+      renderGoogleMap(fresh);
+      renderInquirySection(fresh);
+      initTheme(fresh);
+    }
   });
 }
 
 /* ==========================================================================
-   THEME CONTROLLER (LIGHT / DARK LUXURY MODES)
+   THEME CONTROLLER (4 PRO COLOR THEMES + LIGHT / DARK LUXURY MODES)
    ========================================================================== */
 function initTheme(data) {
   const themeToggleBtn = document.getElementById('themeToggleBtn');
   const themeIcon = document.getElementById('themeToggleIcon');
   const htmlEl = document.documentElement;
+
+  // Apply Pro Color Theme (obsidian-gold, ruby-rose, emerald-royalty, sapphire-galaxy)
+  const activeColorTheme = data.theme.colorTheme || 'obsidian-gold';
+  htmlEl.setAttribute('data-color-theme', activeColorTheme);
+  if (document.body) {
+    document.body.setAttribute('data-color-theme', activeColorTheme);
+  }
 
   // Check visitor permission from Admin
   if (!data.theme.allowVisitorToggle) {
@@ -859,59 +906,28 @@ function renderCelebrateAndContacts(data) {
 }
 
 /* ==========================================================================
-   07. INQUIRY FORM CONTROLLER
+   07. INQUIRY & CONTACT SECTION CONTROLLER
+   Requirement: "inqury form button https://momentsgalaxy.com/contact is link se connect rhegi form nhi hoga vhn"
    ========================================================================== */
-function initInquiryForm(data) {
-  const form = document.getElementById('inquiryForm');
-  if (!form) return;
+function renderInquirySection(data) {
+  const contactUrl = (data.links && data.links.contactUrl) || 'https://momentsgalaxy.com/contact';
 
-  // Set default min date to today
-  const dateInput = document.getElementById('inqDate');
-  if (dateInput) {
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
+  const inquiryLinkBtn = document.getElementById('btnInquiryContactLink');
+  if (inquiryLinkBtn) {
+    inquiryLinkBtn.href = contactUrl;
   }
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  const drawerContactLink = document.getElementById('drawerContactLink');
+  if (drawerContactLink) {
+    drawerContactLink.href = contactUrl;
+  }
 
-    const name = document.getElementById('inqName').value.trim();
-    const whatsapp = document.getElementById('inqWhatsapp').value.trim();
-    const occasion = document.getElementById('inqOccasion').value;
-    const theater = document.getElementById('inqTheater').value;
-    const date = document.getElementById('inqDate').value;
-    const details = document.getElementById('inqDetails').value.trim();
-
-    if (!name || !whatsapp) {
-      showToast('Please fill in your name and WhatsApp number! ⚠️');
-      return;
-    }
-
-    // Save to Local Database for Admin Panel
-    const newInquiry = window.GalaxyData.addInquiry({
-      name,
-      whatsapp,
-      occasion,
-      theater,
-      date,
-      details
-    });
-
-    showToast('Inquiry submitted successfully! Opening WhatsApp... ✨');
-
-    // Create Pre-filled WhatsApp message for instant booking conversation
-    const waText = `Hi Moments Galaxy! 🌟\nI would like to inquire about booking a private theater.\n\n*Name:* ${name}\n*Phone:* ${whatsapp}\n*Occasion:* ${occasion}\n*Theater:* ${theater}\n*Date:* ${date}\n*Notes:* ${details || 'None'}\n\nPlease share available slots & package details!`;
-
-    const waUrl = `https://wa.me/91${data.contact.whatsapp}?text=${encodeURIComponent(waText)}`;
-
-    // Reset Form
-    form.reset();
-
-    // Redirect to WhatsApp after short delay
-    setTimeout(() => {
-      window.open(waUrl, '_blank');
-    }, 1200);
-  });
+  const waBtn = document.getElementById('btnInquiryWaLink');
+  if (waBtn && data.contact && data.contact.whatsapp) {
+    const cleanWa = data.contact.whatsapp.replace(/\D/g, '');
+    const msg = encodeURIComponent(data.contact.whatsappMessage || 'Hi Moments Galaxy, I want to inquire about booking a private theater!');
+    waBtn.href = `https://wa.me/91${cleanWa}?text=${msg}`;
+  }
 }
 
 /* ==========================================================================
