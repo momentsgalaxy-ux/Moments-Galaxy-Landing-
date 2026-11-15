@@ -41,31 +41,17 @@ const DEFAULT_CONFIG = {
     videoPoster: 'assets/images/hero-presenter.svg',
     unmuteLabel: 'Sound ON'
   },
+  theatersPricing: {
+    showPrices: true // Admin toggle: show or hide prices on demo video buttons & showcase
+  },
   theaters: [
     {
-      id: 'star-basic',
-      title: 'Star Theater – Basic',
-      duration: '01:12',
-      badge: 'POPULAR',
-      description: 'Cozy romantic mini theater setup with high-definition cinema projection, surround sound, and balloon decor.',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-romantic-dinner-table-with-candles-in-a-cozy-room-41802-large.mp4',
-      poster: 'assets/images/star-basic.svg',
-      capacity: '2 - 6 Guests',
-      bestFor: 'Birthdays & Dates'
-    },
-    {
-      id: 'star-addons',
-      title: 'Star Theater – With Add-ons',
-      duration: '01:45',
-      badge: 'DELUXE',
-      description: 'Upgraded Star Theater with neon ambient lights, fog effect, luxury balloon arch, rose petal path, and photo booth setup.',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-friends-laughing-and-enjoying-a-movie-at-a-cinema-41800-large.mp4',
-      poster: 'assets/images/star-addons.svg',
-      capacity: '2 - 8 Guests',
-      bestFor: 'Proposals & Anniversaries'
-    },
-    {
       id: 'prime-basic',
+      theaterGroup: 'prime',
+      theatreName: 'Prime Theater',
+      packageType: 'basic',
+      packageName: 'Basic',
+      price: '2499',
       title: 'Prime Theater – Basic',
       duration: '01:20',
       badge: 'WIDE SCREEN',
@@ -77,6 +63,11 @@ const DEFAULT_CONFIG = {
     },
     {
       id: 'prime-addons',
+      theaterGroup: 'prime',
+      theatreName: 'Prime Theater',
+      packageType: 'addons',
+      packageName: 'With Add-ons',
+      price: '4500',
       title: 'Prime Theater – With Add-ons',
       duration: '01:55',
       badge: 'PREMIUM VIP',
@@ -85,6 +76,38 @@ const DEFAULT_CONFIG = {
       poster: 'assets/images/prime-addons.svg',
       capacity: '4 - 15 Guests',
       bestFor: 'Surprise Proposals & Grand Parties'
+    },
+    {
+      id: 'star-basic',
+      theaterGroup: 'star',
+      theatreName: 'Star Theater',
+      packageType: 'basic',
+      packageName: 'Basic',
+      price: '1999',
+      title: 'Star Theater – Basic',
+      duration: '01:12',
+      badge: 'POPULAR',
+      description: 'Cozy romantic mini theater setup with high-definition cinema projection, surround sound, and balloon decor.',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-romantic-dinner-table-with-candles-in-a-cozy-room-41802-large.mp4',
+      poster: 'assets/images/star-basic.svg',
+      capacity: '2 - 6 Guests',
+      bestFor: 'Birthdays & Dates'
+    },
+    {
+      id: 'star-addons',
+      theaterGroup: 'star',
+      theatreName: 'Star Theater',
+      packageType: 'addons',
+      packageName: 'With Add-ons',
+      price: '3500',
+      title: 'Star Theater – With Add-ons',
+      duration: '01:45',
+      badge: 'DELUXE',
+      description: 'Upgraded Star Theater with neon ambient lights, fog effect, luxury balloon arch, rose petal path, and photo booth setup.',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-friends-laughing-and-enjoying-a-movie-at-a-cinema-41800-large.mp4',
+      poster: 'assets/images/star-addons.svg',
+      capacity: '2 - 8 Guests',
+      bestFor: 'Proposals & Anniversaries'
     }
   ],
   coupons: {
@@ -197,9 +220,30 @@ class GalaxyDataManager {
       if (stored) {
         const parsed = JSON.parse(stored);
         // Deep merge with DEFAULT_CONFIG in case new fields were added
+        // Merge theaters ensuring price and group metadata exist
+        const defaultTheatersMap = {};
+        DEFAULT_CONFIG.theaters.forEach(th => { defaultTheatersMap[th.id] = th; });
+
+        const mergedTheaters = ((parsed.theaters && parsed.theaters.length > 0) ? parsed.theaters : DEFAULT_CONFIG.theaters).map(th => {
+          const def = defaultTheatersMap[th.id] || {};
+          return {
+            ...def,
+            ...th,
+            price: th.price !== undefined ? th.price : (def.price || '1999'),
+            theaterGroup: th.theaterGroup || def.theaterGroup || (th.id.includes('prime') ? 'prime' : 'star'),
+            packageType: th.packageType || def.packageType || (th.id.includes('addons') ? 'addons' : 'basic'),
+            theatreName: th.theatreName || def.theatreName || (th.id.includes('prime') ? 'Prime Theater' : 'Star Theater')
+          };
+        });
+
+        const orderPriority = { 'prime-basic': 1, 'prime-addons': 2, 'star-basic': 3, 'star-addons': 4 };
+        mergedTheaters.sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
+
         return {
           ...DEFAULT_CONFIG,
           ...parsed,
+          theatersPricing: { ...DEFAULT_CONFIG.theatersPricing, ...(parsed.theatersPricing || {}) },
+          theaters: mergedTheaters,
           theme: { ...DEFAULT_CONFIG.theme, ...(parsed.theme || {}) },
           contact: { ...DEFAULT_CONFIG.contact, ...(parsed.contact || {}) },
           links: { ...DEFAULT_CONFIG.links, ...(parsed.links || {}) },

@@ -116,6 +116,10 @@ function populateFormFields(data) {
   if (statCoup) statCoup.textContent = isCoupOn ? 'Active (ON)' : 'Hidden (OFF)';
   if (coupBadge) coupBadge.textContent = isCoupOn ? 'ON' : 'OFF';
 
+  const statTheat = document.getElementById('statTheaters');
+  const isPriceOn = data.theatersPricing ? data.theatersPricing.showPrices !== false : true;
+  if (statTheat) statTheat.textContent = isPriceOn ? 'Prices ON' : 'Prices OFF';
+
   // Hero Fields
   setValue('heroWelcomeSubtitleInput', data.hero.welcomeSubtitle);
   setValue('heroBrandTitleInput', data.hero.brandName);
@@ -130,6 +134,33 @@ function populateFormFields(data) {
   setValue('linkAddonsInput', data.links.addonsUrl);
   setValue('linkFoodInput', data.links.foodUrl);
   setValue('linkBookingInput', data.links.bookingUrl);
+
+  // Private Theater Pricing Display Toggle
+  const toggleTheaterPrices = document.getElementById('toggleTheaterPrices');
+  const toggleTheaterPricesText = document.getElementById('theaterPricesToggleText');
+  const theatersPriceBadge = document.getElementById('theatersPriceBadge');
+  if (toggleTheaterPrices) {
+    const isPriceOn = data.theatersPricing ? data.theatersPricing.showPrices !== false : true;
+    toggleTheaterPrices.checked = isPriceOn;
+    if (toggleTheaterPricesText) {
+      toggleTheaterPricesText.textContent = `Prices: ${isPriceOn ? 'ON' : 'OFF'}`;
+    }
+    if (theatersPriceBadge) {
+      theatersPriceBadge.textContent = isPriceOn ? 'Prices ON' : 'Prices OFF';
+    }
+    toggleTheaterPrices.onchange = () => {
+      const stateStr = toggleTheaterPrices.checked ? 'ON' : 'OFF';
+      if (toggleTheaterPricesText) {
+        toggleTheaterPricesText.textContent = `Prices: ${stateStr}`;
+      }
+      if (theatersPriceBadge) {
+        theatersPriceBadge.textContent = `Prices ${stateStr}`;
+      }
+      if (statTheat) {
+        statTheat.textContent = `Prices ${stateStr}`;
+      }
+    };
+  }
 
   // Public Discount Coupons
   const toggleCoupons = document.getElementById('toggleCouponsEnabled');
@@ -291,23 +322,30 @@ function initTheatersEditor(data) {
     const box = document.createElement('div');
     box.className = 'theater-edit-box';
 
+    const groupTitle = theater.theatreName || (theater.id.includes('prime') ? 'Prime Theater' : 'Star Theater');
+    const pkgName = theater.packageName || (theater.id.includes('addons') ? 'With Add-ons' : 'Basic');
+
     box.innerHTML = `
       <div class="theater-edit-header">
-        <span>🎬 Theater #${idx + 1}: ${theater.title}</span>
-        <span class="sidebar-badge">${theater.badge || 'POPULAR'}</span>
+        <span>🎬 <strong>${groupTitle}</strong> — ${pkgName}</span>
+        <span class="sidebar-badge" style="background: rgba(223, 177, 91, 0.2); color: var(--gold-300); font-weight: 700;">Price: ₹${theater.price || ''}</span>
       </div>
 
-      <div class="form-grid-3">
+      <div class="form-grid-4">
         <div class="form-field">
-          <label class="field-label">Theater Title</label>
+          <label class="field-label">Package Display Title</label>
           <input type="text" class="field-input th-title" value="${theater.title}">
         </div>
         <div class="form-field">
-          <label class="field-label">Duration Badge (e.g. 01:12)</label>
+          <label class="field-label">Package Price (₹)</label>
+          <input type="text" class="field-input th-price" value="${theater.price || ''}" placeholder="1999">
+        </div>
+        <div class="form-field">
+          <label class="field-label">Duration Badge</label>
           <input type="text" class="field-input th-duration" value="${theater.duration}">
         </div>
         <div class="form-field">
-          <label class="field-label">Top Ribbon Badge (e.g. POPULAR, VIP)</label>
+          <label class="field-label">Top Ribbon Badge</label>
           <input type="text" class="field-input th-badge" value="${theater.badge || ''}">
         </div>
       </div>
@@ -868,15 +906,22 @@ function saveAllAdminChanges() {
     exploreButtonText: document.getElementById('heroExploreBtnInput').value
   };
 
-  // 2. Theaters (4 items)
+  // 2. Theaters (Pricing, Videos & Info)
   const theaterBoxes = document.querySelectorAll('.theater-edit-box');
   const theaters = [];
   theaterBoxes.forEach((box, i) => {
     // Only theater boxes have th-title
     const titleEl = box.querySelector('.th-title');
     if (titleEl) {
+      const existing = current.theaters[i] || {};
+      const priceVal = box.querySelector('.th-price') ? box.querySelector('.th-price').value.trim() : (existing.price || '1999');
       theaters.push({
-        id: (current.theaters[i] && current.theaters[i].id) || `theater-${i+1}`,
+        id: existing.id || `theater-${i+1}`,
+        theaterGroup: existing.theaterGroup || (i >= 2 ? 'prime' : 'star'),
+        theatreName: existing.theatreName || (i >= 2 ? 'Prime Theater' : 'Star Theater'),
+        packageType: existing.packageType || (i % 2 === 1 ? 'addons' : 'basic'),
+        packageName: existing.packageName || (i % 2 === 1 ? 'With Add-ons' : 'Basic'),
+        price: priceVal,
         title: titleEl.value,
         duration: box.querySelector('.th-duration').value,
         badge: box.querySelector('.th-badge').value,
@@ -888,6 +933,11 @@ function saveAllAdminChanges() {
       });
     }
   });
+
+  const toggleTheaterPrices = document.getElementById('toggleTheaterPrices');
+  const theatersPricing = {
+    showPrices: toggleTheaterPrices ? toggleTheaterPrices.checked : true
+  };
 
   // 3. Quick Links
   const links = {
@@ -982,6 +1032,7 @@ function saveAllAdminChanges() {
   const updated = {
     ...current,
     hero,
+    theatersPricing,
     theaters: theaters.length > 0 ? theaters : current.theaters,
     links,
     coupons,

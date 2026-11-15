@@ -285,65 +285,221 @@ function renderHero(data) {
 }
 
 /* ==========================================================================
-   02. OUR PRIVATE THEATERS SECTION
+   02. OUR PRIVATE THEATERS SECTION (PRIME THEATER 1ST, STAR THEATER 2ND)
+   Each theater displays a single demo video with 2 select buttons (Basic / With Add-ons) & price.
    ========================================================================== */
+const selectedPackages = {
+  prime: 'basic',
+  star: 'basic'
+};
+
 function renderTheaters(data) {
-  const grid = document.getElementById('theatersGrid');
-  if (!grid) return;
+  const container = document.getElementById('theaterShowcaseWrapper') || document.getElementById('theatersGrid');
+  if (!container) return;
 
-  grid.innerHTML = '';
+  const theaters = data.theaters || [];
+  const showPrices = data.theatersPricing ? data.theatersPricing.showPrices !== false : true;
 
-  data.theaters.forEach((theater) => {
-    const card = document.createElement('div');
-    card.className = 'theater-card';
+  // Format price helper (e.g. 1999 -> ₹1,999)
+  const formatPriceText = (val) => {
+    if (!val && val !== 0) return '';
+    const str = String(val).trim();
+    const digits = str.replace(/[^\d]/g, '');
+    if (!digits) return str;
+    return '₹' + Number(digits).toLocaleString('en-IN');
+  };
 
-    card.innerHTML = `
-      <div class="theater-video-thumb" data-theater-id="${theater.id}">
-        <img src="${theater.poster}" alt="${theater.title}" loading="lazy">
-        <span class="theater-tag-badge">${theater.badge || 'POPULAR'}</span>
-        <span class="duration-badge">${theater.duration || '01:30'}</span>
-        <div class="play-btn-circle" style="width: 58px; height: 58px; font-size: 20px;">
-          <span>▶</span>
+  // Group definitions: 1st Prime Theater, 2nd Star Theater
+  const groups = [
+    {
+      id: 'prime',
+      badge: '👑 ULTRA-LUXURY VIP',
+      title: 'Prime Theater',
+      capacity: '4 - 15 Guests',
+      tagline: 'Grand VIP Ultra-Luxury Cinema with massive 4K projection & Dolby 7.1 audio'
+    },
+    {
+      id: 'star',
+      badge: '🌟 MOST POPULAR',
+      title: 'Star Theater',
+      capacity: '2 - 6 Guests',
+      tagline: 'Cozy romantic mini theater setup with ambient decor & intimate cinema vibe'
+    }
+  ];
+
+  container.innerHTML = groups.map((g, gIdx) => {
+    // Current package selection for this theater (defaults to basic)
+    const currentPkg = selectedPackages[g.id] || 'basic';
+
+    // Filter items for this theater
+    const currentTheaters = theaters.filter(t => {
+      const grp = t.theaterGroup || (t.id.includes('prime') ? 'prime' : 'star');
+      return grp === g.id;
+    });
+
+    const basicPkg = currentTheaters.find(t => (t.packageType === 'basic' || t.id.includes('basic'))) || currentTheaters[0] || {};
+    const addonsPkg = currentTheaters.find(t => (t.packageType === 'addons' || t.id.includes('addons'))) || currentTheaters[1] || basicPkg;
+
+    const activePkg = currentPkg === 'addons' ? addonsPkg : basicPkg;
+
+    const basicPrice = formatPriceText(basicPkg.price || (g.id === 'prime' ? '2499' : '1999'));
+    const addonsPrice = formatPriceText(addonsPkg.price || (g.id === 'prime' ? '4500' : '3500'));
+    const activePrice = formatPriceText(activePkg.price || (currentPkg === 'addons' ? (g.id === 'prime' ? '4500' : '3500') : (g.id === 'prime' ? '2499' : '1999')));
+
+    return `
+      <div class="theater-showcase-section" data-theater-group="${g.id}">
+        
+        <!-- Theater Group Header Bar -->
+        <div class="theater-section-header">
+          <div class="theater-header-left">
+            <span class="theater-group-badge">${g.badge}</span>
+            <h3 class="theater-group-title text-gold-gradient">${g.title}</h3>
+          </div>
+          <span class="theater-group-meta">👥 Capacity: ${g.capacity}</span>
         </div>
-      </div>
-      <div class="theater-card-body">
-        <h3 class="theater-card-title text-gold-gradient">${theater.title}</h3>
-        <p class="theater-card-desc">${theater.description}</p>
-        <div class="theater-meta-pills">
-          <span class="meta-pill">👥 ${theater.capacity || '2 - 6 Guests'}</span>
-          <span class="meta-pill">✨ ${theater.bestFor || 'Celebrations'}</span>
-        </div>
-        <div class="theater-card-actions">
-          <button type="button" class="btn-watch-demo" data-watch-id="${theater.id}">
-            <span>▶</span>
-            <span>Watch Demo</span>
+        <p class="theater-group-desc" style="color: var(--text-muted); font-size: 14px; margin-bottom: 18px;">
+          ${g.tagline}
+        </p>
+
+        <!-- 2 Package Select Buttons: Basic vs With Add-ons (Shows price before playing) -->
+        <div class="package-select-tabs" role="tablist" aria-label="Select Package for ${g.title}">
+          <button type="button" class="btn-pkg-select ${currentPkg === 'basic' ? 'active' : ''}" data-theater="${g.id}" data-pkg="basic">
+            <div class="pkg-btn-inner">
+              <span class="pkg-icon">🎬</span>
+              <div class="pkg-info">
+                <span class="pkg-name">Basic Package</span>
+                <span class="pkg-sub">Romantic Setup</span>
+              </div>
+              ${showPrices ? `
+                <div class="pkg-price-badge">${basicPrice}</div>
+              ` : ''}
+            </div>
           </button>
-          <a href="${data.links.bookingUrl}" class="btn-book-card" target="_blank" rel="noopener">
-            <span>📅</span>
-            <span>Book Now</span>
-          </a>
+
+          <button type="button" class="btn-pkg-select ${currentPkg === 'addons' ? 'active' : ''}" data-theater="${g.id}" data-pkg="addons">
+            <div class="pkg-btn-inner">
+              <span class="pkg-icon">✨</span>
+              <div class="pkg-info">
+                <span class="pkg-name">With Add-ons</span>
+                <span class="pkg-sub">Full Luxury Decor</span>
+              </div>
+              ${showPrices ? `
+                <div class="pkg-price-badge">${addonsPrice}</div>
+              ` : ''}
+            </div>
+          </button>
         </div>
+
+        <!-- Single Grand Demo Video Showcase Card for this theater -->
+        <div class="theater-showcase-card">
+          
+          <!-- Video Player Column -->
+          <div class="showcase-video-col">
+            <div class="theater-video-thumb showcase-thumb" data-theater-id="${activePkg.id}">
+              <img src="${activePkg.poster || (g.id === 'prime' ? 'assets/images/prime-basic.svg' : 'assets/images/star-basic.svg')}" alt="${activePkg.title}" loading="lazy" class="showcase-poster-img">
+              
+              <span class="theater-tag-badge">${activePkg.badge || (currentPkg === 'addons' ? 'DELUXE VIP' : 'POPULAR')}</span>
+              <span class="duration-badge">${activePkg.duration || '01:30'}</span>
+
+              ${showPrices ? `
+                <div class="showcase-price-tag">
+                  <span class="price-tag-prefix">🏷️ Price:</span>
+                  <span class="price-tag-value">${activePrice}</span>
+                </div>
+              ` : ''}
+
+              <div class="play-btn-circle showcase-play-circle" title="Play Demo Video">
+                <span>▶</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Details & Actions Column -->
+          <div class="showcase-body-col">
+            <div class="showcase-badge-row">
+              <span class="meta-pill">👥 ${activePkg.capacity || g.capacity}</span>
+              <span class="meta-pill">✨ ${activePkg.bestFor || 'Celebrations'}</span>
+              <span class="meta-pill">🍿 HD Cinema & Surround</span>
+            </div>
+
+            <h4 class="showcase-title text-gold-gradient">${activePkg.title}</h4>
+            <p class="showcase-desc">${activePkg.description}</p>
+
+            ${showPrices ? `
+              <div class="showcase-price-banner">
+                <div class="price-banner-icon">🏷️</div>
+                <div class="price-banner-text">
+                  <span class="price-banner-label">Celebration Package Price</span>
+                  <span class="price-banner-amount">${activePrice} <small>/ celebration</small></span>
+                </div>
+                <span class="price-banner-tag">Instant Confirmation</span>
+              </div>
+            ` : ''}
+
+            <div class="showcase-action-btns">
+              <button type="button" class="btn-watch-showcase btn-watch-item" data-theater-id="${activePkg.id}">
+                <span>▶</span>
+                <span>Watch Demo Video</span>
+              </button>
+              <a href="${data.links.bookingUrl}" class="btn-book-showcase" target="_blank" rel="noopener">
+                <span>📅</span>
+                <span>Book Now</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        ${gIdx < groups.length - 1 ? `
+          <!-- Decorative Divider between Prime and Star Theater -->
+          <div class="theater-section-divider">
+            <span class="divider-sparkle">✦</span>
+          </div>
+        ` : ''}
+
       </div>
     `;
+  }).join('');
 
-    // Click handler for thumb & watch demo (resolves direct upload or URL)
-    const thumb = card.querySelector('.theater-video-thumb');
-    const watchBtn = card.querySelector('.btn-watch-demo');
+  // 1. Package select buttons (Basic vs With Add-ons) for each theater
+  container.querySelectorAll('.btn-pkg-select').forEach(btn => {
+    btn.onclick = () => {
+      const theaterId = btn.dataset.theater;
+      const pkg = btn.dataset.pkg;
+      if (selectedPackages[theaterId] !== pkg) {
+        selectedPackages[theaterId] = pkg;
+        renderTheaters(data);
+      }
+    };
+  });
 
-    const handleWatch = async () => {
-      const activeVideoUrl = await window.GalaxyMediaDB.getMediaUrl('theater_' + theater.id, theater.videoUrl);
+  // 2. Play video handlers (resolves IndexedDB direct upload or URL)
+  container.querySelectorAll('.showcase-thumb').forEach(thumb => {
+    thumb.onclick = async () => {
+      const tid = thumb.dataset.theaterId;
+      const theaterItem = theaters.find(t => t.id === tid) || {};
+      const activeVideoUrl = await window.GalaxyMediaDB.getMediaUrl('theater_' + tid, theaterItem.videoUrl);
       openVideoModal({
-        title: theater.title,
-        desc: theater.description,
+        title: theaterItem.title,
+        desc: theaterItem.description,
         videoUrl: activeVideoUrl,
         bookingUrl: data.links.bookingUrl
       });
     };
+  });
 
-    if (thumb) thumb.addEventListener('click', handleWatch);
-    if (watchBtn) watchBtn.addEventListener('click', handleWatch);
-
-    grid.appendChild(card);
+  container.querySelectorAll('.btn-watch-item').forEach(btn => {
+    btn.onclick = async () => {
+      const tid = btn.dataset.theaterId;
+      const theaterItem = theaters.find(t => t.id === tid) || {};
+      const activeVideoUrl = await window.GalaxyMediaDB.getMediaUrl('theater_' + tid, theaterItem.videoUrl);
+      openVideoModal({
+        title: theaterItem.title,
+        desc: theaterItem.description,
+        videoUrl: activeVideoUrl,
+        bookingUrl: data.links.bookingUrl
+      });
+    };
   });
 }
 

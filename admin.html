@@ -50,7 +50,8 @@
       <li>
         <button type="button" class="nav-item-btn" data-tab="tabTheaters">
           <span class="nav-icon">🎬</span>
-          <span>Private Theaters (4)</span>
+          <span>Theaters & Pricing</span>
+          <span class="sidebar-badge" id="theatersPriceBadge" style="background: rgba(223, 177, 91, 0.2); color: var(--gold-300);">Prices ON</span>
         </button>
       </li>
       <li>
@@ -162,8 +163,8 @@
             <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">COUPONS STATUS</div>
           </div>
           <div class="admin-card" style="text-align: center;">
-            <div style="font-size: 32px; color: var(--gold-400);">4 Theaters</div>
-            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">DEMO VIDEOS</div>
+            <div style="font-size: 26px; color: var(--gold-400);" id="statTheaters">Prices ON</div>
+            <div style="font-size: 13.5px; color: var(--text-muted); font-weight: 700;">DEMO & PRICING</div>
           </div>
         </div>
 
@@ -267,15 +268,28 @@
       </section>
 
       <!-- ====================================================================
-           TAB 2: PRIVATE THEATERS (4 DEMO VIDEOS)
+           TAB 2: PRIVATE THEATERS (DEMO VIDEOS & PRICING)
            ==================================================================== -->
       <section class="tab-pane" id="tabTheaters">
         <div class="admin-card">
           <div class="card-header-bar">
             <div>
-              <div class="card-title">🎬 Private Theaters (4 Demo Videos & Details)</div>
-              <div class="card-desc">Edit video URLs, duration badges, titles, descriptions, and guest capacities.</div>
+              <div class="card-title">🎬 Private Theaters (Demo Videos & Pricing)</div>
+              <div class="card-desc">Edit demo videos, package prices (Basic & With Add-ons), duration badges, and details.</div>
             </div>
+
+            <!-- Master Theater Price Toggle -->
+            <label class="switch-control" title="Toggle price display on website">
+              <input type="checkbox" class="switch-input" id="toggleTheaterPrices">
+              <span class="switch-track">
+                <span class="switch-thumb"></span>
+              </span>
+              <span class="switch-label" id="theaterPricesToggleText">Prices: ON</span>
+            </label>
+          </div>
+
+          <div style="background: rgba(223, 177, 91, 0.08); border-left: 3px solid var(--gold-500); padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-size: 13.5px;">
+            💰 <strong>Price Display Control:</strong> Agar <strong>Prices switch OFF</strong> hoga, to landing page par Demo Video ke buttons aur preview se price hide ho jayegi. <strong>ON</strong> hone par jo price aap neeche set karenge (e.g. ₹1999 ya ₹3500) wahi customer ko video play karne se pehle dikhegi!
           </div>
 
           <div id="theatersListContainer">

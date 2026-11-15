@@ -30,8 +30,10 @@ Write-Host "  Default Admin PIN: admin123" -ForegroundColor White
 Write-Host "==========================================================" -ForegroundColor Yellow
 Write-Host "Press Ctrl+C to stop the server.`n"
 
-# Launch default browser
-Start-Process $prefix
+# Launch default browser (unless disabled)
+if (-not $env:NO_BROWSER) {
+    Start-Process $prefix
+}
 
 $mimeTypes = @{
     ".html" = "text/html; charset=utf-8"
